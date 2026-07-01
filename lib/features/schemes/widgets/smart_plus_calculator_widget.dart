@@ -1,0 +1,644 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ashokgold_scheme_app/core/theme/theme.dart';
+import 'package:ashokgold_scheme_app/features/common/providers/metal_rate_provider.dart';
+
+class SmartPlusCalculatorWidget extends ConsumerStatefulWidget {
+  final String schemeId;
+  final String schemeName;
+
+  const SmartPlusCalculatorWidget({
+    super.key,
+    required this.schemeId,
+    required this.schemeName,
+  });
+
+  @override
+  ConsumerState<SmartPlusCalculatorWidget> createState() =>
+      _SmartPlusCalculatorWidgetState();
+}
+
+class _SmartPlusCalculatorWidgetState extends ConsumerState<SmartPlusCalculatorWidget> {
+  double _monthlyAmount = 5000.0; // default value
+  final double _minAmount = 500.0;
+  final double _maxAmount = 50000.0; // maximum amount capped at 50000
+  final int _months = 11;
+  
+  late TextEditingController _amountController;
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _amountController = TextEditingController(text: _monthlyAmount.toInt().toString());
+    _focusNode.addListener(_onFocusChange);
+  }
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    _focusNode.removeListener(_onFocusChange);
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _onFocusChange() {
+    if (!_focusNode.hasFocus) {
+      final parsed = double.tryParse(_amountController.text);
+      if (parsed == null) {
+        _updateAmount(_monthlyAmount);
+      } else {
+        // Round to nearest 500 and clamp between min and max
+        final rounded = ((parsed / 500.0).round() * 500.0).clamp(_minAmount, _maxAmount);
+        _updateAmount(rounded);
+      }
+    }
+  }
+
+  void _updateAmount(double newAmount) {
+    setState(() {
+      _monthlyAmount = newAmount;
+    });
+    final intValue = newAmount.toInt();
+    if (_amountController.text != intValue.toString()) {
+      _amountController.text = intValue.toString();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    
+    // Watch latest metal rate
+    final metalRateAsync = ref.watch(latestMetalRateProvider);
+    final double goldRate = metalRateAsync.maybeWhen(
+      data: (rate) => rate.rates.metalRate,
+      orElse: () => 14280.0, // fallback gold price from user screenshot
+    );
+
+    // Calculations:
+    final double totalAccumulated = _monthlyAmount * _months;
+    const double makingChargePercent = 8.0; // 8% average making charge
+    final double makingChargeAmount = totalAccumulated * (makingChargePercent / 100.0);
+    
+    // Normal jewelry gets full 8% discount
+    const double discountPercent = 8.0;
+    final double discountAmount = totalAccumulated * (discountPercent / 100.0);
+    
+    final double totalJewelryValue = totalAccumulated + makingChargeAmount;
+    final double grandTotalPaid = totalAccumulated + (makingChargeAmount - discountAmount);
+    
+    // Gold weight calculation: Grand Total divided by gold rate per gram
+    final double accumulatedWeight = goldRate > 0 ? grandTotalPaid / goldRate : 0.0;
+    final double benefitWeight = goldRate > 0 ? discountAmount / goldRate : 0.0;
+    final double paidWeight = goldRate > 0 ? totalAccumulated / goldRate : 0.0;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Title
+        Center(
+          child: Text(
+            '${widget.schemeName} Benefits Calculator',
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: 'Urbanist',
+              fontWeight: FontWeight.w700,
+              color: isDark ? Palette.whiteColor : Palette.blackColor,
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+
+        // 22KT Gold rate badge
+        Center(
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: isDark 
+                  ? Palette.primaryColor.withValues(alpha: 0.1) 
+                  : Palette.primaryColor.withValues(alpha: 0.05),
+              border: Border.all(
+                color: Palette.primaryColor.withValues(alpha: 0.3),
+                width: 1,
+              ),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+            child: Text(
+              '22 KT Gold Current Price: ₹${goldRate.toStringAsFixed(0)}/gm',
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Urbanist',
+                fontWeight: FontWeight.w700,
+                color: Palette.primaryColor,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        // Input advance amount planned
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                'Input your advance amount planned',
+                style: TextStyle(
+                  fontSize: 13.5,
+                  fontFamily: 'Urbanist',
+                  fontWeight: FontWeight.w600,
+                  color: isDark ? Palette.whiteColor.withValues(alpha: 0.9) : Palette.blackColor.withValues(alpha: 0.8),
+                ),
+              ),
+            ),
+            Container(
+              width: 100,
+              height: 40,
+              decoration: BoxDecoration(
+                color: isDark ? Palette.whiteColor.withValues(alpha: 0.08) : Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: Text(
+                      '₹',
+                      style: TextStyle(
+                        fontFamily: 'Urbanist',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: _amountController,
+                      focusNode: _focusNode,
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.right,
+                      style: const TextStyle(
+                        fontFamily: 'Urbanist',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                      decoration: const InputDecoration(
+                        isDense: true,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                        border: InputBorder.none,
+                      ),
+                      onChanged: (val) {
+                        final parsed = double.tryParse(val);
+                        if (parsed != null) {
+                          // Snaps to nearest 500 step for the internal slider value
+                          final rounded = ((parsed / 500.0).round() * 500.0).clamp(_minAmount, _maxAmount);
+                          setState(() {
+                            _monthlyAmount = rounded;
+                          });
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+
+        // Slider for monthly amount - increments in steps of 500 (Maximizing horizontal drag length)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: SliderTheme(
+            data: SliderTheme.of(context).copyWith(
+              activeTrackColor: Palette.redColor,
+              inactiveTrackColor: Colors.grey.shade300,
+              thumbColor: Palette.redColor,
+              overlayColor: Palette.redColor.withValues(alpha: 0.2),
+              trackHeight: 4,
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+              trackShape: const RectangularSliderTrackShape(), // Extends track to full width
+            ),
+            child: Slider(
+              min: _minAmount,
+              max: _maxAmount,
+              divisions: 99, // ((50000 - 500) / 500) = 99 divisions for perfect multiples of 500
+              value: _monthlyAmount,
+              onChanged: (value) {
+                _updateAmount(value);
+              },
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Min ₹${_minAmount.toInt()}',
+                style: TextStyle(fontSize: 11, color: Colors.grey.shade500, fontWeight: FontWeight.w500),
+              ),
+              Text(
+                'Max ₹${_maxAmount.toInt()}',
+                style: TextStyle(fontSize: 11, color: Colors.grey.shade500, fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        // Duration of advance (Months) - Locked Slider at 11
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                'Number of EMA (Easy Monthly Advances)',
+                style: TextStyle(
+                  fontSize: 13.5,
+                  fontFamily: 'Urbanist',
+                  fontWeight: FontWeight.w600,
+                  color: isDark ? Palette.whiteColor.withValues(alpha: 0.9) : Palette.blackColor.withValues(alpha: 0.8),
+                ),
+              ),
+            ),
+            Text(
+              '$_months',
+              style: TextStyle(
+                fontFamily: 'Urbanist',
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: isDark ? Palette.whiteColor : Palette.blackColor,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: SliderTheme(
+            data: SliderTheme.of(context).copyWith(
+              activeTrackColor: Colors.grey.shade400,
+              inactiveTrackColor: Colors.grey.shade200,
+              thumbColor: Colors.grey.shade500,
+              trackHeight: 4,
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
+              trackShape: const RectangularSliderTrackShape(), // Extends track to full width
+            ),
+            child: Slider(
+              min: 1,
+              max: 11, // max month capped to 11
+              value: _months.toDouble(),
+              onChanged: null, // Locked / Disabled
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+
+        // Calculations Card with Dashed Border
+        CustomPaint(
+          painter: DashedBorderPainter(
+            color: Palette.primaryColor.withValues(alpha: 0.6),
+            borderRadius: 16,
+            strokeWidth: 1.2,
+          ),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: isDark 
+                  ? Palette.whiteColor.withValues(alpha: 0.02) 
+                  : Palette.primaryColor.withValues(alpha: 0.02),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildCardRow('Total Accumulated Amount', '₹ ${totalAccumulated.toStringAsFixed(0)}', isDark),
+                const SizedBox(height: 8),
+                _buildCardRow('Average Making Charge (8%)', '₹ ${makingChargeAmount.toStringAsFixed(0)}', isDark),
+                const SizedBox(height: 8),
+                _buildCardRow(
+                  'Scheme MC Discount (${discountPercent.toStringAsFixed(0)}%)',
+                  '-₹ ${discountAmount.toStringAsFixed(0)}',
+                  isDark,
+                  valueColor: Colors.green.shade600,
+                  isBold: true,
+                ),
+                const SizedBox(height: 8),
+                _buildCardRow('Total Jewelry Value', '₹ ${totalJewelryValue.toStringAsFixed(0)}', isDark),
+                const SizedBox(height: 12),
+                
+                const Divider(height: 1, thickness: 0.5),
+                const SizedBox(height: 12),
+                
+                _buildCardRow('Grand Total (You Pay)', '₹ ${grandTotalPaid.toStringAsFixed(0)}', isDark, isBold: true),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Total Accumulated Weight',
+                      style: TextStyle(
+                        fontFamily: 'Urbanist',
+                        fontSize: 13.5,
+                        fontWeight: FontWeight.w600,
+                        color: isDark ? Palette.whiteColor.withValues(alpha: 0.7) : Palette.blackColor.withValues(alpha: 0.7),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Icon(Icons.circle, size: 10, color: Colors.amber.shade700),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${accumulatedWeight.toStringAsFixed(2)}g',
+                          style: TextStyle(
+                            fontFamily: 'Urbanist',
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: isDark ? Palette.whiteColor : Palette.blackColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+
+                // Donut Chart + Legend Row
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Donut Chart
+                    SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: CustomPaint(
+                        painter: DonutChartPainter(
+                          paidFraction: totalAccumulated / grandTotalPaid,
+                          paidColor: Palette.primaryColor,
+                          benefitColor: Palette.primaryColor.withValues(alpha: 0.25),
+                          strokeWidth: 8,
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Time Period\n11 Months',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'Urbanist',
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: isDark ? Palette.whiteColor.withValues(alpha: 0.7) : Palette.blackColor.withValues(alpha: 0.6),
+                              height: 1.2,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    
+                    // Legend
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildLegendItem(
+                            color: Palette.primaryColor,
+                            title: 'Accumulated Amount',
+                            subtitle: '₹${totalAccumulated.toStringAsFixed(0)} (${paidWeight.toStringAsFixed(2)}g)',
+                            isDark: isDark,
+                          ),
+                          const SizedBox(height: 8),
+                          _buildLegendItem(
+                            color: Palette.primaryColor.withValues(alpha: 0.25),
+                            title: 'Benefits/Savings',
+                            subtitle: '₹${discountAmount.toStringAsFixed(0)} (${benefitWeight.toStringAsFixed(3)}g)',
+                            isDark: isDark,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+
+                // Seperated Red Note (GST & Premium Jewellery Details)
+                Text(
+                  'Note: Average making charges of 8% are fully discounted under the scheme. For Premium or Diamond jewelry, the making charge discount is 5% less (i.e. a 3% discount is applied, leaving a net 5% making charge payable). GST amount is not included (3% GST is applicable on the final purchase value).',
+                  style: TextStyle(
+                    fontFamily: 'Urbanist',
+                    fontSize: 10,
+                    height: 1.4,
+                    fontWeight: FontWeight.w600,
+                    color: Palette.redColor, // Styled in Red
+                  ),
+                ),
+                const SizedBox(height: 8),
+                
+                // Seperated Standard Disclaimer Note (Grey)
+                Text(
+                  'Note: The benefits calculator serves for illustrative purposes only; actual values may vary based on the gold rate on the payment day, accumulated weight/amount, and making cost of the selected jewellery.',
+                  style: TextStyle(
+                    fontFamily: 'Urbanist',
+                    fontSize: 9.5,
+                    height: 1.4,
+                    fontWeight: FontWeight.w500,
+                    color: isDark ? Palette.whiteColor.withValues(alpha: 0.45) : Palette.blackColor.withValues(alpha: 0.45),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCardRow(
+    String label,
+    String value,
+    bool isDark, {
+    Color? valueColor,
+    bool isBold = false,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontFamily: 'Urbanist',
+            fontSize: 13.5,
+            fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
+            color: isDark 
+                ? Palette.whiteColor.withValues(alpha: isBold ? 0.95 : 0.7) 
+                : Palette.blackColor.withValues(alpha: isBold ? 0.95 : 0.7),
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            fontFamily: 'Urbanist',
+            fontSize: isBold ? 15.5 : 14,
+            fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
+            color: valueColor ?? (isDark ? Palette.whiteColor : Palette.blackColor),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLegendItem({
+    required Color color,
+    required String title,
+    required String subtitle,
+    required bool isDark,
+  }) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(top: 4),
+          width: 8,
+          height: 8,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontFamily: 'Urbanist',
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: isDark ? Palette.whiteColor.withValues(alpha: 0.5) : Palette.blackColor.withValues(alpha: 0.5),
+                ),
+              ),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontFamily: 'Urbanist',
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Palette.whiteColor.withValues(alpha: 0.9) : Palette.blackColor.withValues(alpha: 0.8),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// Painter for Dashed Rectangle border
+class DashedBorderPainter extends CustomPainter {
+  final Color color;
+  final double strokeWidth;
+  final double gap;
+  final double dashLength;
+  final double borderRadius;
+
+  DashedBorderPainter({
+    required this.color,
+    this.strokeWidth = 1.0,
+    this.gap = 4.0,
+    this.dashLength = 6.0,
+    this.borderRadius = 12.0,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke;
+
+    final path = Path()
+      ..addRRect(RRect.fromRectAndRadius(
+        Rect.fromLTWH(0, 0, size.width, size.height),
+        Radius.circular(borderRadius),
+      ));
+
+    final dashPath = Path();
+    double distance = 0.0;
+    for (final pathMetric in path.computeMetrics()) {
+      while (distance < pathMetric.length) {
+        dashPath.addPath(
+          pathMetric.extractPath(distance, distance + dashLength),
+          Offset.zero,
+        );
+        distance += dashLength + gap;
+      }
+    }
+    canvas.drawPath(dashPath, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant DashedBorderPainter oldDelegate) =>
+      color != oldDelegate.color ||
+      strokeWidth != oldDelegate.strokeWidth ||
+      gap != oldDelegate.gap ||
+      dashLength != oldDelegate.dashLength ||
+      borderRadius != oldDelegate.borderRadius;
+}
+
+// Painter for Donut Chart
+class DonutChartPainter extends CustomPainter {
+  final double paidFraction;
+  final Color paidColor;
+  final Color benefitColor;
+  final double strokeWidth;
+
+  DonutChartPainter({
+    required this.paidFraction,
+    required this.paidColor,
+    required this.benefitColor,
+    this.strokeWidth = 8.0,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Rect.fromLTWH(
+      strokeWidth / 2,
+      strokeWidth / 2,
+      size.width - strokeWidth,
+      size.height - strokeWidth,
+    );
+
+    final bgPaint = Paint()
+      ..color = benefitColor
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    final progressPaint = Paint()
+      ..color = paidColor
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    // Draw full background / benefit circle
+    canvas.drawArc(rect, 0, 2 * 3.14159265, false, bgPaint);
+
+    // Draw paid portion starting from top (-pi/2)
+    final sweepAngle = 2 * 3.14159265 * paidFraction;
+    canvas.drawArc(rect, -3.14159265 / 2, sweepAngle, false, progressPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant DonutChartPainter oldDelegate) =>
+      paidFraction != oldDelegate.paidFraction ||
+      paidColor != oldDelegate.paidColor ||
+      benefitColor != oldDelegate.benefitColor ||
+      strokeWidth != oldDelegate.strokeWidth;
+}
