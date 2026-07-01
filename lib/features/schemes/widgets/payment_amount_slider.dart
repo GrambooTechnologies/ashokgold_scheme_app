@@ -120,7 +120,7 @@ class _PaymentAmountSliderState extends State<PaymentAmountSlider> {
               style: TextStyle(
                 color: Palette.primaryColor,
                 fontSize: w * 0.04,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w700,
               ),
             ),
             Container(

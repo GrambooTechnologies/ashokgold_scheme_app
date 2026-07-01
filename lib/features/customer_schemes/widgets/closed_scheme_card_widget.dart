@@ -230,7 +230,7 @@ class ClosedSchemeCardWidget extends StatelessWidget {
                               ?.copyWith(
                                 color: Colors.grey[800],
                                 fontSize: SizeConfig.w(context, 14),
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w700,
                               ),
                         ),
                       ],
@@ -258,7 +258,7 @@ class ClosedSchemeCardWidget extends StatelessWidget {
                               ?.copyWith(
                                 color: Colors.grey[800],
                                 fontSize: SizeConfig.w(context, 14),
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w700,
                               ),
                         ),
                       ],

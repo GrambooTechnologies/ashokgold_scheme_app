@@ -52,7 +52,7 @@ class SchemesListView extends ConsumerWidget {
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: SizeConfig.w(context, 18),
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
@@ -94,100 +94,6 @@ class SchemesListView extends ConsumerWidget {
                   SizedBox(height: SizeConfig.h(context, 13)),
 
                   ContactSupportButton(),
-                  SizedBox(height: SizeConfig.w(context, 24)),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Palette.cardBackgroundColor.withOpacity(0.1),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // ================= TITLE =================
-                        Text(
-                          "Redeem your savings with Anaswara Jewellery",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: SizeConfig.w(context, 15),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-
-                        SizedBox(height: SizeConfig.h(context, 5)),
-
-                        // ================= SUBTITLE =================
-                        Text(
-                          "Complete your 11-month savings plan and convert it into beautiful jewellery at your nearest Anaswara showroom.",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: SizeConfig.w(context, 12),
-                            color: Colors.black54,
-                          ),
-                        ),
-
-                        SizedBox(height: SizeConfig.h(context, 24)),
-
-                        // ================= STEPS =================
-                        Row(
-                          children: [
-                            // STEP 1
-                            Expanded(
-                              child: _stepCard(
-                                context: context,
-                                icon: CupertinoIcons.sparkles,
-                                text:
-                                    "Choose your nearest jewellery from Anaswara Jewellery",
-                              ),
-                            ),
-
-                            SizedBox(width: SizeConfig.h(context, 15)),
-
-                            // STEP 2
-                            Expanded(
-                              child: _stepCard(
-                                context: context,
-                                icon: CupertinoIcons.doc_plaintext,
-                                text:
-                                    "Show your scheme details in the App/Book at checkout",
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: SizeConfig.h(context, 24)),
-
-                        // ================= CONDITIONS =================
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Conditions",
-                            style: TextStyle(
-                              fontSize: SizeConfig.w(context, 16),
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-
-                        SizedBox(height: SizeConfig.w(context, 5)),
-
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "- Redemption available after completion of 11 months\n"
-                            "- Maturity date will be shown in the app and scheme book\n"
-                            "- Valid only at authorized Anaswara Jewellery showrooms\n"
-                            "- Benefits applicable as per scheme terms\n",
-                            style: TextStyle(
-                              fontSize: SizeConfig.w(context, 13),
-                              color: Colors.black54,
-                              height: 1.5,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                   SizedBox(height: SizeConfig.w(context, 31)),
                 ],
               ),

@@ -403,7 +403,7 @@ class _AddEditNomineeViewState extends ConsumerState<AddEditNomineeView>
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: w * 0.045,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                         fontFamily: 'Urbanist',
                         letterSpacing: -0.3,
                       ),

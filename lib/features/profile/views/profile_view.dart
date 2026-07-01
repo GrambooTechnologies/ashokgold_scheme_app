@@ -81,21 +81,8 @@ class _ProfileViewState extends ConsumerState<ProfileView>
           backgroundColor: Palette.backgroundColor,
           forceMaterialTransparency: true,
           automaticallyImplyLeading: false,
-          elevation: 0,
-          title: Text(
-            'My Profile',
-            style: TextStyle(
-              fontSize: w * 0.052,
-              fontWeight: FontWeight.w700,
-              fontFamily: 'Urbanist',
-              color: const Color(0xFF1A1A2E),
-              letterSpacing: -0.5,
-            ),
-          ),
-          actions: [
-            _NotificationBell(w: w),
-            SizedBox(width: w * 0.03),
-          ],
+          centerTitle: true,
+          toolbarHeight: SizeConfig.h(context, 36),
         ),
         body: FadeTransition(
           opacity: _fadeAnim,
@@ -106,7 +93,33 @@ class _ProfileViewState extends ConsumerState<ProfileView>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: h * 0.008),
+                  Padding(
+                    padding: EdgeInsets.only(left: SizeConfig.w(context, 4)),
+                    child: Text(
+                      'My Profile',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: SizeConfig.w(context, 18),
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: SizeConfig.h(context, 3)),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: SizeConfig.w(context, 4),
+                      right: SizeConfig.w(context, 10),
+                    ),
+                    child: Text(
+                      "Manage your personal details, nominee information, and account settings.",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        height: 1.2,
+                        fontSize: SizeConfig.w(context, 12),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: SizeConfig.h(context, 17)),
 
                   // ── Profile Hero Card ──
                   _buildProfileHeroCard(
@@ -383,7 +396,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: w * 0.048,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w700,
                               fontFamily: 'Urbanist',
                               letterSpacing: -0.3,
                             ),

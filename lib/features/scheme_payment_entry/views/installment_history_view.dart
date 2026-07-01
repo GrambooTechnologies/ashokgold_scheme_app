@@ -162,7 +162,7 @@ class _InstallmentHistoryViewState
                           '#${installment.installmentNumber}',
                           style: TextStyle(
                             fontSize: SizeConfig.w(context, 13),
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w700,
                             color: Palette.primaryColor,
                           ),
                         ),

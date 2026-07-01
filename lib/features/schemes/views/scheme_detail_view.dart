@@ -190,7 +190,10 @@ class _SchemeDetailViewState extends ConsumerState<SchemeDetailView> {
         loading: () => const Loader(),
         error: (error, _) => ErrorRetryWidget(
           message: 'Error: ${error.toString()}',
-          onRetry: () => ref.invalidate(schemeDetailProvider(schemeId!)),
+          onRetry: () {
+            ref.invalidate(schemeDetailProvider(schemeId!));
+            ref.invalidate(translatedSchemeProvider(schemeId!));
+          },
         ),
       ),
     );
@@ -279,8 +282,6 @@ class _SchemeDetailViewState extends ConsumerState<SchemeDetailView> {
           ),
         ],
 
-        SizedBox(height: h * 0.02),
-
         // Benefit Calculator Section
         Padding(
           padding: EdgeInsets.symmetric(horizontal: w * 0.04),
@@ -292,8 +293,6 @@ class _SchemeDetailViewState extends ConsumerState<SchemeDetailView> {
             ),
           ),
         ),
-
-        SizedBox(height: h * 0.02),
 
         // Terms and Conditions
         if (scheme.termsAndConditions.isNotEmpty) ...[
@@ -338,7 +337,7 @@ class _SchemeDetailViewState extends ConsumerState<SchemeDetailView> {
               ),
             ),
           ),
-          SizedBox(height: h * 0.02),
+          SizedBox(height: h * 0.01),
         ],
 
         /// Join Button
@@ -422,12 +421,30 @@ class _SchemeImagesCarouselState extends State<_SchemeImagesCarousel> {
   @override
   Widget build(BuildContext context) {
     if (widget.images.isEmpty) {
+      /*
       return Container(
         width: widget.width,
         height: widget.height,
         color: Colors.grey[300],
         child: const Center(
           child: Icon(Icons.image, color: Colors.grey, size: 40),
+        ),
+      );
+      */
+      return SizedBox(
+        width: widget.width,
+        height: widget.height,
+        child: Image.asset(
+          "assets/banner/goldScheme.png",
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              color: Colors.grey[300],
+              child: const Center(
+                child: Icon(Icons.broken_image, color: Colors.grey, size: 40),
+              ),
+            );
+          },
         ),
       );
     }
@@ -447,6 +464,7 @@ class _SchemeImagesCarouselState extends State<_SchemeImagesCarousel> {
             },
             itemCount: widget.images.length,
             itemBuilder: (context, index) {
+              /*
               final imageUrl = widget.images[index].imageUrl;
 
               if (imageUrl == null || imageUrl.isEmpty) {
@@ -471,6 +489,25 @@ class _SchemeImagesCarouselState extends State<_SchemeImagesCarousel> {
                   );
                 },
                 errorWidget: (context, url, error) {
+                  return Container(
+                    color: Colors.grey[300],
+                    child: const Center(
+                      child: Icon(
+                        Icons.broken_image,
+                        color: Colors.grey,
+                        size: 40,
+                      ),
+                    ),
+                  );
+                },
+              );
+              */
+              return Image.asset(
+                "assets/banner/goldScheme.png",
+                fit: BoxFit.cover,
+                width: widget.width,
+                height: widget.height,
+                errorBuilder: (context, error, stackTrace) {
                   return Container(
                     color: Colors.grey[300],
                     child: const Center(
@@ -591,7 +628,7 @@ class _ExpandableSectionState extends State<_ExpandableSection>
         borderRadius: BorderRadius.circular(16),
         child: Column(
           children: [
-            InkWell(
+            GestureDetector(
               onTap: _toggleExpanded,
               child: Padding(
                 padding: const EdgeInsets.symmetric(

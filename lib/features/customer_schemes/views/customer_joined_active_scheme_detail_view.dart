@@ -94,7 +94,7 @@ class _CustomerJoinedSchemeDetailViewState
                               style: Theme.of(context).textTheme.bodyLarge
                                   ?.copyWith(
                                     fontSize: SizeConfig.w(context, 20),
-                                    fontWeight: FontWeight.w800,
+                                    fontWeight: FontWeight.w700,
                                     color: Palette.blackColor,
                                   ),
                               textAlign: TextAlign.left,
@@ -667,7 +667,7 @@ class _CustomerJoinedSchemeDetailViewState
                         title,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontSize: w * 0.038,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w700,
                           color: color,
                         ),
                       ),

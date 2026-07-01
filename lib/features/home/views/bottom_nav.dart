@@ -5,7 +5,6 @@ import 'package:ashokgold_scheme_app/features/customer_schemes/views/customer_sc
 import 'package:ashokgold_scheme_app/features/home/views/home_view.dart';
 import 'package:ashokgold_scheme_app/features/profile/views/profile_view.dart';
 import 'package:ashokgold_scheme_app/features/schemes/views/schemes_list_view.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -61,48 +60,14 @@ class _BottomNavState extends ConsumerState<BottomNav>
 
   @override
   Widget build(BuildContext context) {
-    final w = MediaQuery.of(context).size.width;
     final customer = ref.watch(customerProvider);
 
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
       appBar: null,
 
-      bottomNavigationBar: CurvedNavigationBar(
-        buttonBackgroundColor: Palette.primaryColor,
-        backgroundColor: Palette.backgroundColor,
-        color: Palette.whiteColor,
-        index: _currentIndex,
-        items: <Widget>[
-          Icon(
-            CupertinoIcons.home,
-            size: w * 0.06,
-            color: _currentIndex == 0
-                ? Palette.whiteColor
-                : Palette.primaryColor,
-          ),
-          Icon(
-            CupertinoIcons.rectangle_stack,
-            size: w * 0.06,
-            color: _currentIndex == 1
-                ? Palette.whiteColor
-                : Palette.primaryColor,
-          ),
-          Icon(
-            CupertinoIcons.list_bullet_below_rectangle,
-            size: w * 0.06,
-            color: _currentIndex == 2
-                ? Palette.whiteColor
-                : Palette.primaryColor,
-          ),
-          Icon(
-            CupertinoIcons.profile_circled,
-            size: w * 0.06,
-            color: _currentIndex == 3
-                ? Palette.whiteColor
-                : Palette.primaryColor,
-          ),
-        ],
+      bottomNavigationBar: CustomBottomNav(
+        currentIndex: _currentIndex,
         onTap: (int index) {
           setState(() {
             _currentIndex = index;
@@ -176,6 +141,142 @@ class _BottomNavState extends ConsumerState<BottomNav>
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CustomBottomNav extends StatelessWidget {
+  const CustomBottomNav({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
+  });
+
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+
+  NavigationDestination _destination(
+    BuildContext context, {
+    required double w,
+    required double h,
+    required String label,
+    required IconData outlinedIcon,
+  }) {
+    return NavigationDestination(
+      icon: Icon(outlinedIcon, size: w * (21 / 390)),
+      selectedIcon: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: w * (10 / 390),
+          vertical: h * (5 / 844),
+        ),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Palette.primaryColor,
+              Palette.primaryColor.withOpacity(0.85),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(w * (14 / 390)),
+          boxShadow: [
+            BoxShadow(
+              color: Palette.primaryColor.withOpacity(0.28),
+              blurRadius: w * (10 / 390),
+              offset: Offset(0, h * (3 / 844)),
+            ),
+          ],
+        ),
+        child: Icon(outlinedIcon, size: w * (20 / 390), color: Colors.white),
+      ),
+      label: label,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
+
+    return Container(
+      margin: EdgeInsets.fromLTRB(
+        w * (12 / 390),
+        h * (6 / 844),
+        w * (12 / 390),
+        h * (8 / 844),
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(w * (24 / 390)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.09),
+            blurRadius: w * (20 / 390),
+            offset: Offset(0, h * (8 / 844)),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(w * (24 / 390)),
+        child: NavigationBarTheme(
+          data: NavigationBarThemeData(
+            height: h * (76 / 844),
+            backgroundColor: Colors.white,
+            indicatorColor: Colors.transparent,
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
+            labelTextStyle: WidgetStateProperty.resolveWith((states) {
+              final selected = states.contains(WidgetState.selected);
+              return TextStyle(
+                fontSize: w * (11 / 390),
+                fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                color: selected ? Palette.primaryColor : Colors.black54,
+                letterSpacing: 0.1,
+              );
+            }),
+          ),
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              splashFactory: NoSplash.splashFactory,
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+            ),
+            child: NavigationBar(
+              selectedIndex: currentIndex,
+              onDestinationSelected: onTap,
+              destinations: [
+                _destination(
+                  context,
+                  w: w,
+                  h: h,
+                  label: 'Home',
+                  outlinedIcon: CupertinoIcons.home,
+                ),
+                _destination(
+                  context,
+                  w: w,
+                  h: h,
+                  label: 'Schemes',
+                  outlinedIcon: CupertinoIcons.rectangle_stack,
+                ),
+                _destination(
+                  context,
+                  w: w,
+                  h: h,
+                  label: 'My Schemes',
+                  outlinedIcon: CupertinoIcons.list_bullet_below_rectangle,
+                ),
+                _destination(
+                  context,
+                  w: w,
+                  h: h,
+                  label: 'Profile',
+                  outlinedIcon: CupertinoIcons.profile_circled,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

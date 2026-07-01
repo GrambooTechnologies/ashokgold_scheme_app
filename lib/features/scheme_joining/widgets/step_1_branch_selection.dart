@@ -129,7 +129,7 @@ class _StepHeader extends StatelessWidget {
                 title,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontSize: w * 0.052,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w700,
                   color: Palette.primaryColor,
                 ),
               ),

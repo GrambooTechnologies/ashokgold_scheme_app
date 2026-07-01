@@ -1,8 +1,6 @@
 import 'package:ashokgold_scheme_app/features/schemes/models/scheme_model.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shimmer/shimmer.dart';
 
 import '../../../core/theme/theme.dart';
 
@@ -21,9 +19,6 @@ class SchemeCardWidget extends StatelessWidget {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
 
-    // Get image URL - prefer images.imageUrl, fallback to imageUrl
-    final schemeImageUrl = scheme.images?.imageUrl ?? scheme.imageUrl;
-
     return GestureDetector(
       onTap: onTap,
       child: Padding(
@@ -38,44 +33,27 @@ class SchemeCardWidget extends StatelessWidget {
           child: Stack(
             children: [
               // Background Image
-              schemeImageUrl != null && schemeImageUrl.isNotEmpty
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(w * 0.05),
-                      child: CachedNetworkImage(
-                        imageUrl: schemeImageUrl,
-                        fit: BoxFit.cover,
-                        width: w,
-                        height: h * 0.24,
-                        placeholder: (context, url) {
-                          print("Loading image...");
-                          return Shimmer.fromColors(
-                            baseColor: Colors.grey[300]!,
-                            highlightColor: Colors.grey[100]!,
-                            child: Container(color: Colors.grey[300]),
-                          );
-                        },
-                        errorWidget: (context, url, error) {
-                          print("ERROR: $error");
-                          print("FAILED URL: $url");
-                          return Container(
-                            color: Colors.grey[300],
-                            child: const Center(
-                              child: Icon(
-                                Icons.broken_image,
-                                color: Colors.grey,
-                                size: 40,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    )
-                  : Container(
+              ClipRRect(
+                borderRadius: BorderRadius.circular(w * 0.05),
+                child: Image.asset(
+                  "assets/banner/goldScheme.png",
+                  fit: BoxFit.cover,
+                  width: w,
+                  height: h * 0.24,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
                       color: Colors.grey[300],
                       child: const Center(
-                        child: Icon(Icons.image, color: Colors.grey, size: 40),
+                        child: Icon(
+                          Icons.broken_image,
+                          color: Colors.grey,
+                          size: 40,
+                        ),
                       ),
-                    ),
+                    );
+                  },
+                ),
+              ),
               // Content Overlay
               Padding(
                 padding: EdgeInsets.only(left: w * 0.06, bottom: h * 0.025),

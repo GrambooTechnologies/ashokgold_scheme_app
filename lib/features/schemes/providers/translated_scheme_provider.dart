@@ -13,31 +13,36 @@ final translatedSchemeProvider = FutureProvider.family
 
       if (lang == 'en') return scheme;
 
-      return scheme.copyWith(
-        name: await service.translateText(scheme.name, lang),
-        description: await service.translateText(
-          scheme.description ?? '',
-          lang,
-        ),
-        benefitPoints: await Future.wait(
-          scheme.benefitPoints.map((e) async {
-            return e.copyWith(
-              benefitPointDescription: await service.translateText(
-                e.benefitPointDescription,
-                lang,
-              ),
-            );
-          }),
-        ),
-        termsAndConditions: await Future.wait(
-          scheme.termsAndConditions.map((tc) async {
-            return tc.copyWith(
-              termConditionDescription: await service.translateText(
-                tc.termConditionDescription,
-                lang,
-              ),
-            );
-          }),
-        ),
-      );
+      try {
+        return scheme.copyWith(
+          name: await service.translateText(scheme.name, lang),
+          description: await service.translateText(
+            scheme.description ?? '',
+            lang,
+          ),
+          benefitPoints: await Future.wait(
+            scheme.benefitPoints.map((e) async {
+              return e.copyWith(
+                benefitPointDescription: await service.translateText(
+                  e.benefitPointDescription,
+                  lang,
+                ),
+              );
+            }),
+          ),
+          termsAndConditions: await Future.wait(
+            scheme.termsAndConditions.map((tc) async {
+              return tc.copyWith(
+                termConditionDescription: await service.translateText(
+                  tc.termConditionDescription,
+                  lang,
+                ),
+              );
+            }),
+          ),
+        );
+      } catch (e) {
+        // Fallback to original untranslated scheme
+        return scheme;
+      }
     });

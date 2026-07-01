@@ -184,7 +184,7 @@ class _StepHeader extends StatelessWidget {
                 'Review & Confirm',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   fontSize: w * 0.052,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w700,
                   color: Palette.primaryColor,
                 ),
               ),
@@ -249,7 +249,7 @@ class _SchemeBannerCard extends StatelessWidget {
                   scheme.name,
                   style: TextStyle(
                     fontSize: w * 0.052,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w700,
                     color: Palette.blackColor,
                   ),
                 ),
@@ -407,7 +407,7 @@ class _SectionHeading extends StatelessWidget {
           title,
           style: TextStyle(
             fontSize: w * 0.042,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w700,
             color: Palette.blackColor,
           ),
         ),
@@ -535,7 +535,7 @@ class _PaymentHighlightCard extends StatelessWidget {
             '₹${installmentAmount.toStringAsFixed(2)}',
             style: TextStyle(
               fontSize: w * 0.056,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w700,
               color: Palette.primaryColor,
             ),
           ),

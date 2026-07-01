@@ -315,7 +315,7 @@ class _SchemeBenefitCalculatorState
           value,
           style: TextStyle(
             fontSize: SizeConfig.w(context, 14),
-            fontWeight: bold ? FontWeight.w800 : FontWeight.w600,
+            fontWeight: bold ? FontWeight.w700 : FontWeight.w600,
             color: Palette.blackColor,
           ),
         ),

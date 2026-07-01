@@ -116,7 +116,7 @@ class PaymentTriesView extends ConsumerWidget {
                     '${index + 1}',
                     style: TextStyle(
                       fontSize: SizeConfig.w(context, 12),
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w700,
                       color: Palette.primaryColor,
                     ),
                   ),
@@ -130,7 +130,7 @@ class PaymentTriesView extends ConsumerWidget {
                         formatCurrency(item.amount),
                         style: TextStyle(
                           fontSize: SizeConfig.w(context, 18),
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w700,
                           color: Colors.black87,
                         ),
                       ),

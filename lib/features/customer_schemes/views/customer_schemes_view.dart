@@ -67,15 +67,13 @@ class CustomerSchemesView extends ConsumerWidget {
               children: [
                 if (schemes.isEmpty)
                   Padding(
-                    padding: EdgeInsets.only(
-                      top: h * 0.01,
-                      left: SizeConfig.w(context, 22),
-                    ),
+                    padding: EdgeInsets.only(left: SizeConfig.w(context, 24)),
                     child: Text(
-                      "No active schemes",
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontSize: w * .035,
-                        color: Colors.grey[600],
+                      'No active schemes',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: SizeConfig.w(context, 18),
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   )
@@ -87,7 +85,7 @@ class CustomerSchemesView extends ConsumerWidget {
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: SizeConfig.w(context, 20),
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),

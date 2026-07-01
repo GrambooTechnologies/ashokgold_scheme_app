@@ -31,7 +31,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.primaryColor,
-      body: Center(child: SvgPicture.asset(AssetConstants.logoSvg, width: 75)),
+      body: Center(child: SvgPicture.asset(AssetConstants.logoSvgw, width: 75)),
     );
   }
 

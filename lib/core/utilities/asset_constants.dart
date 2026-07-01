@@ -1,12 +1,8 @@
 class AssetConstants {
-  static const String logoPath = "assets/images/gramboo_crm_logo.png";
-  static const String logoSvg = 'assets/images/logo.svg';
+  static const String logoSvgw = 'assets/images/logo-w.svg';
+  static const String logoSvgd = 'assets/images/logo-d.svg';
 
-  // Banner Images
-  //TODO remove images from assets and delete this class after api integration for banners is done
-  // static const String banner1 = "assets/banner/banner_1.png";
-  // static const String banner2 = "assets/banner/banner_2.png";
-  static const String background = "assets/images/Bg_Blue.jpeg";
+  static const String background = "assets/images/bg.png";
 
   ///scheme
   static const String goldScheme = "assets/banner/goldScheme.png";

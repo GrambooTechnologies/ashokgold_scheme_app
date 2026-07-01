@@ -9,6 +9,10 @@ class FormatDateTime {
     return dateTime?.toIso8601String();
   }
 
+  static String dateTimeToDDMMMYYYY(DateTime dateTime) {
+    return DateFormat('dd MMMM yyyy').format(dateTime);
+  }
+
   static String isoStringToDDMMMYYYYWithTime(
     String? isoString,
     bool? showTime,

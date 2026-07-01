@@ -16,192 +16,110 @@ class GoldRateCard extends ConsumerWidget {
     final w = MediaQuery.of(context).size.width;
     final metalRateAsync = ref.watch(latestMetalRateProvider);
 
-    return Positioned(
-      bottom: 0,
-      left: w * 0.06,
-      right: w * 0.06,
-      child: GestureDetector(
-        onTap: () {
-          // Navigate to gold rate screen
-        },
-        child: Container(
-          width: w * 0.86,
-          height: h * 0.1,
-          decoration: BoxDecoration(
+    return metalRateAsync.when(
+      data: (metalRate) {
+        final formattedDate = FormatDateTime.dateTimeToDDMMMYYYY(
+          DateTime.parse(metalRate.entryDate),
+        );
+        return Container(
+          width: w,
+          height: h * 0.052,
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
+                Color(0xFFF9F4E6),
                 Color(0xFFFFFFFF),
-                Color(0xFFF8F2E5),
-                Color(0xFFF6EFDF),
-                Color(0xFFF4EACF),
+                Color(0xFFFDFBF7),
+                Color(0xFFF9F4E6),
+                Color(0xFFF5EAD2),
               ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(w * 0.05),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.grey,
-                blurRadius: 5,
-                spreadRadius: -1,
-                offset: Offset(-1, 03),
-              ),
-            ],
           ),
-          child: Padding(
-            padding: EdgeInsets.only(left: w * 0.05),
-            child: metalRateAsync.when(
-              data: (metalRate) {
-                final formattedDate = FormatDateTime.dateTimeToDDMMYYYY(
-                  DateTime.parse(metalRate.entryDate),
-                );
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: h * 0.016),
-                      child: SizedBox(
-                        width: w * 0.5,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            SizedBox(),
-                            Text(
-                              '22k Gold Rate',
+          padding: EdgeInsets.only(left: w * 0.04, right: w * 0.075),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  Image.asset(AssetConstants.goldBar, height: h * 0.038),
+                  const SizedBox(width: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '22K GOLD RATE',
+                        style: TextStyle(
+                          fontSize: w * .022,
+                          fontFamily: 'Urbanist',
+                          color: Palette.blackColor.withOpacity(0.55),
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.0,
+                        ),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text:
+                              '₹${metalRate.rates.metalRate.toStringAsFixed(0)}',
+                          style: TextStyle(
+                            fontSize: w * .034,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Urbanist',
+                            color: Palette.primaryColor,
+                            letterSpacing: 0.1,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: ' /gram',
                               style: TextStyle(
-                                fontSize: w * .03,
+                                fontSize: w * .022,
+                                fontWeight: FontWeight.w600,
                                 fontFamily: 'Urbanist',
-                                color: Palette.blackColor,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                text:
-                                    '₹${(metalRate.rates.metalRate * 8).toStringAsFixed(2)}',
-                                style: TextStyle(
-                                  fontSize: w * .045,
-                                  fontWeight: FontWeight.w700,
-                                  color: Palette.primaryColor,
-                                ),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: ' (8 gram)',
-                                    style: TextStyle(
-                                      fontSize: w * .031,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'Urbanist',
-                                      color: Palette.blackColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Text(
-                              'Updated on $formattedDate',
-                              textAlign: TextAlign.right,
-                              maxLines: 1,
-                              style: TextStyle(
-                                height: 1,
-                                fontSize: w * .023,
-                                fontWeight: FontWeight.w300,
-                                fontFamily: 'Urbanist',
-                                color: Palette.blackColor,
+                                color: Palette.blackColor.withOpacity(0.7),
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ),
-                    Image.asset(AssetConstants.goldBar, height: h * 0.08),
-                  ],
-                );
-              },
-              loading: () => Shimmer.fromColors(
-                baseColor: Colors.grey[300]!,
-                highlightColor: Colors.grey[100]!,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      width: w * 0.5,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Container(
-                            width: w * 0.3,
-                            height: 12,
-                            decoration: BoxDecoration(
-                              color: Palette.whiteColor,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                          Container(
-                            width: w * 0.4,
-                            height: 16,
-                            decoration: BoxDecoration(
-                              color: Palette.whiteColor,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: w * 0.2,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: Palette.whiteColor,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              error: (error, stack) => Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    width: w * 0.5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          '22k Gold Rate',
-                          style: TextStyle(
-                            fontSize: w * .03,
-                            fontFamily: 'Urbanist',
-                            color: Palette.blackColor,
-                          ),
-                        ),
-                        Text(
-                          'Unable to load',
-                          style: TextStyle(
-                            fontSize: w * .036,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Urbanist',
-                            color: Colors.red,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      ref.invalidate(latestMetalRateProvider);
-                    },
-                    icon: Icon(
-                      Icons.refresh,
-                      size: w * 0.05,
-                      color: Palette.primaryColor,
-                    ),
+                    ],
                   ),
                 ],
               ),
+              Text(
+                'Updated on \n$formattedDate',
+                textAlign: TextAlign.right,
+                maxLines: 2,
+                style: TextStyle(
+                  height: 1.25,
+                  fontSize: w * .022,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Urbanist',
+                  color: Palette.blackColor.withOpacity(0.4),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+      loading: () => Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Container(width: w, height: h * 0.052, color: Colors.grey[300]),
+      ),
+      error: (error, stack) => Container(
+        width: w,
+        height: h * 0.052,
+        color: Colors.red[50],
+        child: Center(
+          child: Text(
+            'Unable to load gold rate',
+            style: TextStyle(
+              fontSize: w * 0.026,
+              color: Colors.red,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),

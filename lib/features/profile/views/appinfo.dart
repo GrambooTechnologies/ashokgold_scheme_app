@@ -285,7 +285,7 @@ class _DeveloperCard extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: w * 0.055,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w700,
                       letterSpacing: -1,
                     ),
                   ),

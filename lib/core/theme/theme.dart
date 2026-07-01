@@ -9,8 +9,12 @@ class Palette {
   static const Color cardBackgroundColor = Color(0xFF004082);
 
   // static const primaryColor = Color(0xFF231852);
-  static const primaryColor = Color.fromARGB(255, 122, 94, 7);
+  // static const primaryColor = Color.fromARGB(255, 122, 94, 7);
+  // static const backgroundColor = Color(0xFFF6F6F6);
   static const backgroundColor = Color(0xFFF6F6F6);
+  static const primaryColor = Color(0xFF3F3833);
+  static const secondaryColor = Color(0xFF1B1913);
+  static const lightColor = Color(0xFFE9E3DA);
   static const whiteColor = Colors.white;
   static const blackColor = Colors.black;
   static const redColor = Colors.red;
