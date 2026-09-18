@@ -75,7 +75,7 @@ class _SchemeBenefitCalculatorState
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(w * 0.02),
-              color: Colors.yellow.withOpacity(0.1),
+              color: Colors.yellow.withValues(alpha: 0.1),
               border: Border.all(color: Colors.yellow.shade800, width: 1),
             ),
             child: Padding(
@@ -194,10 +194,10 @@ class _SchemeBenefitCalculatorState
       width: double.infinity,
       padding: EdgeInsets.all(SizeConfig.w(context, 18)),
       decoration: BoxDecoration(
-        color: Palette.cardBackgroundColor.withOpacity(0.1),
+        color: Palette.cardBackgroundColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(SizeConfig.w(context, 18)),
         border: Border.all(
-          color: Palette.primaryColor.withOpacity(0.4),
+          color: Palette.primaryColor.withValues(alpha: 0.4),
           width: 1,
         ),
       ),
@@ -287,7 +287,7 @@ class _SchemeBenefitCalculatorState
               style: TextStyle(
                 fontSize: SizeConfig.w(context, 11),
                 height: 1.4,
-                color: Colors.black.withOpacity(0.6),
+                color: Colors.black.withValues(alpha: 0.6),
               ),
             ),
         ],
@@ -308,7 +308,7 @@ class _SchemeBenefitCalculatorState
           label,
           style: TextStyle(
             fontSize: SizeConfig.w(context, 13),
-            color: Colors.black.withOpacity(0.7),
+            color: Colors.black.withValues(alpha: 0.7),
           ),
         ),
         Text(
@@ -335,7 +335,7 @@ class _SchemeBenefitCalculatorState
         padding: EdgeInsets.all(w * 0.045),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(w * 0.055),
-          color: Colors.white.withOpacity(0.8),
+          color: Colors.white.withValues(alpha: 0.8),
         ),
         child: Column(
           children: List.generate(
@@ -424,7 +424,7 @@ class _SchemeBenefitCalculatorState
                 style: TextStyle(
                   fontFamily: 'Urbanist',
                   fontSize: SizeConfig.w(context, 12.5),
-                  color: Colors.black.withOpacity(0.75),
+                  color: Colors.black.withValues(alpha: 0.75),
                 ),
                 children: [
                   TextSpan(text: '$title '),
@@ -450,7 +450,7 @@ class _SchemeBenefitCalculatorState
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: Palette.primaryColor.withOpacity(0.4),
+          color: Palette.primaryColor.withValues(alpha: 0.4),
           width: SizeConfig.w(context, 7),
         ),
       ),
@@ -460,7 +460,7 @@ class _SchemeBenefitCalculatorState
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: SizeConfig.w(context, 11),
-            color: Colors.black.withOpacity(0.7),
+            color: Colors.black.withValues(alpha: 0.7),
           ),
         ),
       ),

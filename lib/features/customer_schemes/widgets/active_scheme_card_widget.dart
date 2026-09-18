@@ -32,7 +32,7 @@ class ActiveSchemeCardWidget extends StatelessWidget {
 
     final Color inactiveEmiColor = isCompleted
         ? Colors.green.shade100
-        : Palette.primaryColor.withOpacity(0.15);
+        : Palette.primaryColor.withValues(alpha: 0.15);
 
     return GestureDetector(
       onTap: () {

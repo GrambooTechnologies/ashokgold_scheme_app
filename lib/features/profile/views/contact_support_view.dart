@@ -50,47 +50,54 @@ class ContactSupportView extends ConsumerWidget {
             children: [
               SizedBox(height: SizeConfig.h(context, 20)),
 
-              // ---------- CONTACT US ----------
-              Text(
-                '  Contact Us',
-                style: TextStyle(
-                  fontSize: SizeConfig.w(context, 20),
-                  fontWeight: FontWeight.bold,
+              // ---------- HERO BANNER ----------
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(
+                  vertical: SizeConfig.h(context, 24),
+                  horizontal: SizeConfig.w(context, 20),
+                ),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Palette.primaryColor.withValues(alpha: 0.15),
+                      Palette.primaryColor.withValues(alpha: 0.05),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: Palette.primaryColor.withValues(alpha: 0.2),
+                    width: 1,
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'How can we help you?',
+                      style: TextStyle(
+                        fontFamily: 'Urbanist',
+                        fontSize: SizeConfig.w(context, 20),
+                        fontWeight: FontWeight.bold,
+                        color: Palette.blackColor,
+                      ),
+                    ),
+                    SizedBox(height: SizeConfig.h(context, 6)),
+                    Text(
+                      'Our customer support team is available to assist you with your queries.',
+                      style: TextStyle(
+                        fontFamily: 'Urbanist',
+                        fontSize: SizeConfig.w(context, 13),
+                        color: Colors.grey.shade700,
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-
-              SizedBox(height: SizeConfig.h(context, 10)),
-
-              // ---------- MAIN OFFICE ----------
-              branchesAsync.when(
-                data: (branches) {
-                  BranchModel? mainBranch;
-                  try {
-                    mainBranch = branches.firstWhere(
-                      (branch) => branch.isMainBranch,
-                    );
-                  } catch (e) {
-                    mainBranch = null;
-                  }
-
-                  if (mainBranch == null) {
-                    return SizedBox.shrink();
-                  }
-
-                  return Column(
-                    children: [
-                      _officeCard(
-                        context,
-                        title: mainBranch.branchName,
-                        address: mainBranch.branchAddress ?? '--',
-                      ),
-                      SizedBox(height: SizeConfig.h(context, 20)),
-                    ],
-                  );
-                },
-                loading: () => SizedBox.shrink(),
-                error: (error, stackTrace) => SizedBox.shrink(),
-              ),
+              SizedBox(height: SizeConfig.h(context, 24)),
 
               // ---------- CONTACT DETAILS ----------
               branchesAsync.when(
@@ -112,97 +119,93 @@ class ContactSupportView extends ConsumerWidget {
 
                   return Column(
                     children: [
-                      _contactTile(
+                      _supportChannelCard(
                         context,
-                        icon: CupertinoIcons.chat_bubble_text_fill,
+                        icon: CupertinoIcons.chat_bubble_2_fill,
                         title: 'Chat with us',
                         value: formattedPhone,
                         subtitle: availabilityText,
+                        iconColor: const Color(0xFF25D366),
+                        iconBg: const Color(0xFF25D366).withValues(alpha: 0.1),
                         onTap: () => _openWhatsApp(
                           context: context,
                           phone: phoneNumber,
                           message: _defaultWhatsappMessage,
                         ),
                       ),
-                      _contactTile(
+                      _supportChannelCard(
                         context,
                         icon: CupertinoIcons.phone_fill,
-                        title: 'Call us',
+                        title: 'Call us directly',
                         value: formattedPhone,
                         subtitle: availabilityText,
+                        iconColor: Palette.primaryColor,
+                        iconBg: Palette.primaryColor.withValues(alpha: 0.1),
                         onTap: () =>
                             _call(context: context, number: phoneNumber),
                       ),
-                      _contactTile(
+                      _supportChannelCard(
                         context,
                         icon: CupertinoIcons.mail_solid,
-                        title: 'Email',
+                        title: 'Email support',
                         value: branchEmail,
+                        subtitle: 'Available 24/7, we reply within 24 hours',
+                        iconColor: const Color(0xFFFF9800),
+                        iconBg: const Color(0xFFFF9800).withValues(alpha: 0.1),
                         onTap: () =>
                             _email(context: context, email: branchEmail),
-                        subtitle: 'Available 24/7, we reply within 24 hours',
+                      ),
+                    ],
+                  );
+                },
+                loading: () => Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24.0),
+                    child: CircularProgressIndicator(color: Palette.primaryColor),
+                  ),
+                ),
+                error: (error, stackTrace) => const SizedBox.shrink(),
+              ),
+              SizedBox(height: SizeConfig.h(context, 20)),
+
+              // ---------- MAIN OFFICE ----------
+              branchesAsync.when(
+                data: (branches) {
+                  BranchModel? mainBranch;
+                  try {
+                    mainBranch = branches.firstWhere(
+                      (branch) => branch.isMainBranch,
+                    );
+                  } catch (e) {
+                    mainBranch = null;
+                  }
+
+                  if (mainBranch == null) {
+                    return SizedBox.shrink();
+                  }
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Head Office',
+                        style: TextStyle(
+                          fontSize: SizeConfig.w(context, 16),
+                          fontWeight: FontWeight.bold,
+                          color: Palette.blackColor,
+                        ),
+                      ),
+                      SizedBox(height: SizeConfig.h(context, 12)),
+                      _officeCard(
+                        context,
+                        title: mainBranch.branchName,
+                        address: mainBranch.branchAddress ?? '--',
                       ),
                     ],
                   );
                 },
                 loading: () => SizedBox.shrink(),
                 error: (error, stackTrace) => SizedBox.shrink(),
-              ),
-
-              SizedBox(height: SizeConfig.h(context, 10)),
-
-              Divider(color: Colors.grey.shade300),
-
-              SizedBox(height: SizeConfig.h(context, 10)),
-
-              // ---------- BRANCHES ----------
-              Text(
-                'Our Branches',
-                style: TextStyle(
-                  fontSize: SizeConfig.w(context, 20),
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-
-              SizedBox(height: SizeConfig.h(context, 15)),
-
-              // Dynamic Branches from Provider
-              branchesAsync.when(
-                data: (branches) {
-                  return Column(
-                    children: [
-                      ...branches.where((branch) => !branch.isMainBranch).map((
-                        branch,
-                      ) {
-                        return Column(
-                          children: [
-                            _branchTile(
-                              context,
-                              () => _call(
-                                context: context,
-                                number: branch.branchPhone ?? '',
-                              ),
-                              branch.branchName,
-                              branch.branchAddress ?? '--',
-                              branch.branchPhone ?? '--',
-                            ),
-                            SizedBox(height: SizeConfig.h(context, 10)),
-                          ],
-                        );
-                      }),
-                    ],
-                  );
-                },
-                loading: () {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: Palette.primaryColor,
-                    ),
-                  );
-                },
-                error: (error, stackTrace) {
-                  return Center(child: Text('Failed to load branches'));
-                },
               ),
 
               SizedBox(height: SizeConfig.h(context, 40)),
@@ -220,37 +223,55 @@ class ContactSupportView extends ConsumerWidget {
     required String title,
     required String address,
   }) {
+    final w = MediaQuery.of(context).size.width;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(SizeConfig.w(context, 16)),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(SizeConfig.w(context, 14)),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade100, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: SizeConfig.w(context, 8),
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: Palette.primaryColor,
-              fontSize: SizeConfig.w(context, 16),
-              fontWeight: FontWeight.w700,
-            ),
+          Row(
+            children: [
+              Icon(
+                Icons.location_on_rounded,
+                color: Palette.primaryColor,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: TextStyle(
+                  color: Palette.primaryColor,
+                  fontFamily: 'Urbanist',
+                  fontSize: w * 0.04,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: SizeConfig.h(context, 3)),
-          Text(
-            address,
-            style: TextStyle(
-              color: Colors.grey.shade700,
-              height: 1.5,
-              fontSize: SizeConfig.w(context, 14),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.only(left: 28),
+            child: Text(
+              address,
+              style: TextStyle(
+                fontFamily: 'Urbanist',
+                color: Colors.grey.shade700,
+                height: 1.5,
+                fontSize: w * 0.033,
+              ),
             ),
           ),
         ],
@@ -258,165 +279,106 @@ class ContactSupportView extends ConsumerWidget {
     );
   }
 
-  // ================= CONTACT TILE =================
+  // ================= SUPPORT CHANNEL CARD =================
 
-  Widget _contactTile(
+  Widget _supportChannelCard(
     BuildContext context, {
     required IconData icon,
     required String title,
-    required String value,
     required String subtitle,
-    VoidCallback? onTap,
+    required String value,
+    required Color iconColor,
+    required Color iconBg,
+    required VoidCallback onTap,
   }) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: SizeConfig.h(context, 20)),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          color: Palette.backgroundColor,
-          child: Row(
-            children: [
-              SizedBox(width: SizeConfig.w(context, 3)),
-              Icon(
-                icon,
-                color: Palette.primaryColor,
-                size: SizeConfig.w(context, 20),
-              ),
-              SizedBox(width: SizeConfig.w(context, 11)),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "$title: $value",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: SizeConfig.w(context, 15),
-                    ),
+    final w = MediaQuery.of(context).size.width;
+
+    return Container(
+      margin: EdgeInsets.only(bottom: SizeConfig.h(context, 16)),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade100, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: iconBg,
+                    shape: BoxShape.circle,
                   ),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: SizeConfig.w(context, 11),
-                      color: Colors.grey.shade600,
-                    ),
+                  child: Icon(
+                    icon,
+                    color: iconColor,
+                    size: 22,
                   ),
-                ],
-              ),
-            ],
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontFamily: 'Urbanist',
+                          fontSize: w * 0.038,
+                          fontWeight: FontWeight.bold,
+                          color: Palette.blackColor,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        value,
+                        style: TextStyle(
+                          fontFamily: 'Urbanist',
+                          fontSize: w * 0.035,
+                          fontWeight: FontWeight.w600,
+                          color: Palette.primaryColor,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontFamily: 'Urbanist',
+                          fontSize: w * 0.028,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Colors.grey.shade400,
+                  size: 14,
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  // ================= BRANCH TILE =================
 
-  Widget _branchTile(
-    BuildContext context,
-    VoidCallback onTap,
-    String title,
-    String address,
-    String phone,
-  ) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(SizeConfig.w(context, 13)),
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(context, 13)),
-          child: Column(
-            children: [
-              SizedBox(height: SizeConfig.h(context, 11)),
-              Row(
-                children: [
-                  Icon(
-                    Icons.store,
-                    color: Palette.primaryColor,
-                    size: SizeConfig.w(context, 24),
-                  ),
-                  SizedBox(width: SizeConfig.w(context, 8)),
-                  SizedBox(
-                    width: SizeConfig.w(context, 315),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: SizeConfig.w(context, 14),
-                          ),
-                        ),
-                        Text(
-                          address,
-                          style: TextStyle(fontSize: SizeConfig.w(context, 12)),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: SizeConfig.h(context, 11)),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.phone,
-                    color: Palette.primaryColor,
-                    size: SizeConfig.w(context, 17),
-                  ),
-                  SizedBox(width: SizeConfig.w(context, 15)),
-                  Text(
-                    phone,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: SizeConfig.w(context, 15),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: SizeConfig.h(context, 11)),
-            ],
-          ),
-        ),
-      ),
-    );
-    // return Card(
-    //   color: Colors.white,
-    //   margin: EdgeInsets.symmetric(
-    //     vertical: SizeConfig.h(context, 6),
-    //   ),
-    //   elevation: 0,
-    //   shape: RoundedRectangleBorder(
-    //     borderRadius: BorderRadius.circular(
-    //       SizeConfig.w(context, 12),
-    //     ),
-    //   ),
-    //   child: ListTile(
-    //     leading: Icon(
-    //       Icons.store,
-    //       color: Palette.primaryColor,
-    //       size: SizeConfig.w(context, 22),
-    //     ),
-    //     title: Text(
-    //       title,
-    //       style: TextStyle(
-    //         fontWeight: FontWeight.w600,
-    //         fontSize: SizeConfig.w(context, 14),
-    //       ),
-    //     ),
-    //     subtitle: Text(
-    //       address,
-    //       style: TextStyle(
-    //         fontSize: SizeConfig.w(context, 12),
-    //       ),
-    //     ),
-    //   ),
-    // );
-  }
 
   // ================= ACTIONS =================
 

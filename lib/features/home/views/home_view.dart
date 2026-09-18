@@ -57,7 +57,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: Palette.primaryColor.withOpacity(0.15),
+                          color: Palette.primaryColor.withValues(alpha: 0.15),
                           width: 0.7,
                         ),
                       ),
@@ -84,7 +84,10 @@ class _HomeViewState extends ConsumerState<HomeView> {
           // Footer Section
           Padding(
             padding: EdgeInsets.symmetric(horizontal: w * 0.06),
-            child: Divider(color: Colors.grey.withOpacity(0.12), thickness: 1),
+            child: Divider(
+              color: Colors.grey.withValues(alpha: 0.12),
+              thickness: 1,
+            ),
           ),
           SizedBox(height: h * 0.02),
           Container(
@@ -98,7 +101,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                     fontFamily: 'Urbanist',
                     fontSize: w * 0.028,
                     fontWeight: FontWeight.w700,
-                    color: Palette.blackColor.withOpacity(0.5),
+                    color: Palette.blackColor.withValues(alpha: 0.5),
                     letterSpacing: 1.0,
                   ),
                 ),
@@ -116,12 +119,12 @@ class _HomeViewState extends ConsumerState<HomeView> {
                       color: Palette.lightColor,
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: Colors.grey.withOpacity(0.15),
+                        color: Colors.grey.withValues(alpha: 0.15),
                         width: 1,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.02),
+                          color: Colors.black.withValues(alpha: 0.02),
                           blurRadius: 6,
                           offset: const Offset(0, 2),
                         ),
@@ -324,7 +327,7 @@ class _BannerCarouselState extends State<_BannerCarousel> {
               decoration: BoxDecoration(
                 color: _currentPage == index
                     ? Palette.primaryColor
-                    : Palette.primaryColor.withOpacity(0.15),
+                    : Palette.primaryColor.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -584,13 +587,13 @@ class _BenefitsAndRedemptionSection extends StatelessWidget {
               Align(
                 alignment: Alignment.center,
                 child: Text(
-                  'Turn your accumulated gold into stunning jewellery at\nyour nearest Bhima store',
+                  'Turn your accumulated gold into stunning jewellery at\nyour nearest ASHOK GOLD store',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Urbanist',
                     fontSize: w * 0.031,
                     fontWeight: FontWeight.w500,
-                    color: const Color(0xFF3F3833).withOpacity(0.7),
+                    color: const Color(0xFF3F3833).withValues(alpha: 0.7),
                     height: 1.3,
                   ),
                 ),
@@ -612,8 +615,7 @@ class _BenefitsAndRedemptionSection extends StatelessWidget {
                           ),
                         ),
                       ),
-                      text:
-                          "Choose your favourite\njewellery from Bhima\nJewels",
+                      text: "Choose your favourite\njewellery from ASHOK\nGOLD",
                     ),
                   ),
                   SizedBox(width: w * 0.04),
@@ -644,7 +646,7 @@ class _BenefitsAndRedemptionSection extends StatelessWidget {
                 '*For 100% benefits, redemption starts after 360 days',
               ),
               _buildConditionPoint(
-                'Checkout your near by Bhima Jewels store using the store locator option',
+                'Checkout your near by ASHOK GOLD store using the store locator option',
               ),
             ],
           ),
@@ -738,7 +740,7 @@ class _BenefitsAndRedemptionSection extends StatelessWidget {
               borderRadius: BorderRadius.circular(4),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFFFF8F00).withOpacity(0.3),
+                  color: const Color(0xFFFF8F00).withValues(alpha: 0.3),
                   blurRadius: 6,
                   offset: const Offset(0, 3),
                 ),
@@ -753,7 +755,7 @@ class _BenefitsAndRedemptionSection extends StatelessWidget {
                     width: 6,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.55),
+                      color: Colors.white.withValues(alpha: 0.55),
                       borderRadius: BorderRadius.circular(0.5),
                     ),
                   ),
@@ -764,7 +766,7 @@ class _BenefitsAndRedemptionSection extends StatelessWidget {
                   child: Icon(
                     Icons.contactless,
                     size: 8,
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha: 0.7),
                   ),
                 ),
               ],
@@ -777,7 +779,7 @@ class _BenefitsAndRedemptionSection extends StatelessWidget {
           child: Icon(
             Icons.pan_tool,
             size: 16,
-            color: const Color(0xFF8D6E63).withOpacity(0.95),
+            color: const Color(0xFF8D6E63).withValues(alpha: 0.95),
           ),
         ),
       ],
@@ -996,7 +998,7 @@ class _GoldBarsPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     final strokePaint = Paint()
-      ..color = Colors.black.withOpacity(0.18)
+      ..color = Colors.black.withValues(alpha: 0.18)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
 
@@ -1249,12 +1251,12 @@ class _ShortcutSection extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: const Color(0xFFD4AF37).withOpacity(0.12),
+            color: const Color(0xFFD4AF37).withValues(alpha: 0.12),
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF7A5E07).withOpacity(0.04),
+              color: const Color(0xFF7A5E07).withValues(alpha: 0.04),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -1307,7 +1309,7 @@ class _ShortcutSection extends StatelessWidget {
             Icon(
               Icons.chevron_right_rounded,
               size: 16,
-              color: const Color(0xFF3F3833).withOpacity(0.3),
+              color: const Color(0xFF3F3833).withValues(alpha: 0.3),
             ),
           ],
         ),

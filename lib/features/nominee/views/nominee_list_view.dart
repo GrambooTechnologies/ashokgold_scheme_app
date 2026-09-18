@@ -101,7 +101,7 @@ class NomineeListView extends ConsumerWidget {
             Row(
               children: [
                 CircleAvatar(
-                  backgroundColor: Palette.primaryColor.withOpacity(0.1),
+                  backgroundColor: Palette.primaryColor.withValues(alpha: 0.1),
                   child: Icon(Icons.person, color: Palette.primaryColor),
                 ),
                 SizedBox(width: SizeConfig.w(context, 12)),

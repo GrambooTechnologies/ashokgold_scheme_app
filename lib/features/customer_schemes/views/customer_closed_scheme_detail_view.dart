@@ -122,7 +122,7 @@ class _CustomerClosedSchemeDetailViewState
                                 horizontal: w * 0.03,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.green.withOpacity(0.1),
+                                color: Colors.green.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(w * 0.016),
                               ),
                               child: Center(
@@ -688,7 +688,7 @@ class _CustomerClosedSchemeDetailViewState
           borderRadius: BorderRadius.circular(w * 0.02),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 6,
               offset: const Offset(0, 2),
             ),

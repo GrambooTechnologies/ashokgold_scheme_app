@@ -42,7 +42,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
-      title: 'Anaswara Scheme App',
+      title: 'Ashok Gold Scheme App',
       debugShowCheckedModeBanner: false,
       theme: Palette.lightTheme,
       darkTheme: Palette.darkTheme,

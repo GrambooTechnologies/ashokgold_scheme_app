@@ -96,7 +96,7 @@ class CustomerSchemesView extends ConsumerWidget {
                     right: SizeConfig.w(context, 24),
                   ),
                   child: Text(
-                    "Track all your joined anaswara schemes in one place. View status, payment progress, and benefits at a glance",
+                    "Track all your joined Ashok Gold schemes in one place. View status, payment progress, and benefits at a glance",
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       height: 1.2,
@@ -173,7 +173,7 @@ class CustomerSchemesView extends ConsumerWidget {
                         color: Colors.white,
                         boxShadow: [
                           BoxShadow(
-                            color: Palette.shadowColor.withOpacity(0.05),
+                            color: Palette.shadowColor.withValues(alpha: 0.05),
                             blurRadius: 6,
                             offset: const Offset(0, 2),
                           ),

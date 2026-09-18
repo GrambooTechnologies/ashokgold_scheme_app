@@ -108,39 +108,158 @@ class SchemeDetailByIdResponseModel {
   }
 
   factory SchemeDetailByIdResponseModel.fromJson(Map<String, dynamic> json) {
+    final rawImages = json['images'] ??
+        json['schemeImages'] ??
+        json['scheme_images'] ??
+        json['scheme_image'] ??
+        json['schemeImage'] ??
+        json['image'];
+
+    List<SchemeImageModel> parsedImages = [];
+    String? directImageUrl = (json['imageUrl'] ??
+            json['image_url'] ??
+            (json['image'] is String ? json['image'] : null))
+        ?.toString()
+        .trim();
+
+    final topBucket =
+        (json['s3Bucket'] ?? json['s3_bucket'] ?? json['bucket'] ?? '')
+            .toString()
+            .trim();
+    final topKey = (json['s3ObjectKey'] ??
+            json['s3_object_key'] ??
+            json['key'] ??
+            '')
+        .toString()
+        .trim();
+    if ((directImageUrl == null || directImageUrl.isEmpty) &&
+        topBucket.isNotEmpty &&
+        topKey.isNotEmpty) {
+      directImageUrl = 'https://$topBucket.s3.ap-south-1.amazonaws.com/$topKey';
+    } else if (directImageUrl != null &&
+        directImageUrl.isNotEmpty &&
+        !directImageUrl.startsWith('http://') &&
+        !directImageUrl.startsWith('https://')) {
+      if (topBucket.isNotEmpty) {
+        directImageUrl =
+            'https://$topBucket.s3.ap-south-1.amazonaws.com/$directImageUrl';
+      } else {
+        directImageUrl =
+            'https://gramboo-scheme-storage.s3.ap-south-1.amazonaws.com/$directImageUrl';
+      }
+    }
+
+    if (rawImages is List) {
+      for (final img in rawImages) {
+        if (img is Map<String, dynamic>) {
+          parsedImages.add(SchemeImageModel.fromJson(img));
+        } else if (img is String && img.trim().isNotEmpty) {
+          String url = img.trim();
+          if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            url =
+                'https://gramboo-scheme-storage.s3.ap-south-1.amazonaws.com/$url';
+          }
+          parsedImages.add(
+            SchemeImageModel(
+              schemeImageId: '',
+              s3Bucket: 'gramboo-scheme-storage',
+              s3ObjectKey: img,
+              imageUrl: url,
+              priority: 0,
+            ),
+          );
+        }
+      }
+    } else if (rawImages is Map<String, dynamic>) {
+      parsedImages.add(SchemeImageModel.fromJson(rawImages));
+    }
+
+    if (parsedImages.isEmpty &&
+        directImageUrl != null &&
+        directImageUrl.isNotEmpty) {
+      parsedImages.add(
+        SchemeImageModel(
+          schemeImageId: (json['schemeImageId'] ??
+                  json['scheme_image_id'] ??
+                  '')
+              ?.toString() ??
+              '',
+          s3Bucket: topBucket,
+          s3ObjectKey: topKey,
+          imageUrl: directImageUrl,
+          priority: 0,
+        ),
+      );
+    }
+
+    final rawType = json['schemeType'] ?? json['scheme_type'] ?? {};
+    final rawGroup = json['schemeGroup'] ?? json['scheme_group'] ?? {};
+    final rawDetails =
+        json['schemeDetails'] ?? json['scheme_details'] ?? json;
+    final rawPaymentRules =
+        json['paymentRules'] ?? json['payment_rules'];
+    final rawBenefits = json['benefitPoints'] ??
+        json['benefit_points'] ??
+        json['benefits'] ??
+        [];
+    final rawTerms = json['termsAndConditions'] ??
+        json['terms_and_conditions'] ??
+        json['terms'] ??
+        [];
+
     return SchemeDetailByIdResponseModel(
-      schemeId: json['schemeId'] as String,
-      name: json['name'] as String,
-      imageUrl: json['imageUrl'] as String?,
-      images: (json['images'] as List<dynamic>? ?? [])
-          .map((img) => SchemeImageModel.fromJson(img as Map<String, dynamic>))
-          .toList(),
-      schemeCode: json['schemeCode'] as String,
-      schemeType: SchemeTypeModel.fromJson(
-        json['schemeType'] as Map<String, dynamic>,
-      ),
-      startDate: json['startDate'] as String?,
-      description: json['description'] as String?,
-      schemeGroup: SchemeGroupModel.fromJson(
-        json['schemeGroup'] as Map<String, dynamic>,
-      ),
-      schemeDetails: SchemeDetailsModel.fromJson(
-        json['schemeDetails'] as Map<String, dynamic>,
-      ),
-      paymentRules: json['paymentRules'] != null
-          ? PaymentRulesModel.fromJson(
-              json['paymentRules'] as Map<String, dynamic>,
-            )
+      schemeId:
+          (json['schemeId'] ?? json['scheme_id'] ?? '').toString(),
+      name: (json['name'] ??
+              json['schemeName'] ??
+              json['scheme_name'] ??
+              '')
+          .toString(),
+      imageUrl: directImageUrl,
+      images: parsedImages,
+      schemeCode:
+          (json['schemeCode'] ?? json['scheme_code'] ?? '').toString(),
+      schemeType: rawType is Map<String, dynamic>
+          ? SchemeTypeModel.fromJson(rawType)
+          : SchemeTypeModel(
+              schemeTypeId: '',
+              schemeTypeName: rawType.toString(),
+            ),
+      startDate: (json['startDate'] ?? json['start_date'])?.toString(),
+      description:
+          (json['description'] ?? json['scheme_description'])?.toString(),
+      schemeGroup: rawGroup is Map<String, dynamic>
+          ? SchemeGroupModel.fromJson(rawGroup)
+          : SchemeGroupModel(
+              schemeGroupId: '',
+              schemeGroupName: rawGroup.toString(),
+            ),
+      schemeDetails: rawDetails is Map<String, dynamic>
+          ? SchemeDetailsModel.fromJson(rawDetails)
+          : SchemeDetailsModel(
+              totalAmount: 0,
+              installmentAmount: 0,
+              installmentCount: 0,
+              cancellationCharge: 0,
+              refundAmount: 0,
+              convWt: false,
+            ),
+      paymentRules: rawPaymentRules != null &&
+              rawPaymentRules is Map<String, dynamic>
+          ? PaymentRulesModel.fromJson(rawPaymentRules)
           : null,
-      benefitPoints: (json['benefitPoints'] as List<dynamic>)
-          .map(
-            (point) =>
-                BenefitPointModel.fromJson(point as Map<String, dynamic>),
-          )
-          .toList(),
-      termsAndConditions: (json['termsAndConditions'] as List<dynamic>? ?? [])
-          .map((tc) => TermConditionModel.fromJson(tc as Map<String, dynamic>))
-          .toList(),
+      benefitPoints: rawBenefits is List
+          ? rawBenefits
+              .whereType<Map<String, dynamic>>()
+              .map((point) => BenefitPointModel.fromJson(point))
+              .toList()
+          : [],
+      termsAndConditions: rawTerms is List
+          ? rawTerms
+              .whereType<Map<String, dynamic>>()
+              .map((tc) => TermConditionModel.fromJson(tc))
+              .toList()
+          : [],
     );
   }
 

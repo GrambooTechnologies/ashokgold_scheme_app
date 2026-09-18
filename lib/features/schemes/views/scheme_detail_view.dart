@@ -20,6 +20,7 @@ import '../../common/translator/languageProvider.dart';
 import '../providers/translated_scheme_provider.dart';
 import '../widgets/benefit_point_card_widget.dart';
 import '../widgets/smart_plus_calculator_widget.dart';
+import '../widgets/tiered_benefit_calculator_widget.dart';
 
 class SchemeDetailView extends ConsumerStatefulWidget {
   static const String routeName = '/scheme-detail';
@@ -88,7 +89,7 @@ class _SchemeDetailViewState extends ConsumerState<SchemeDetailView> {
                         border: Border.all(
                           color: Theme.of(
                             context,
-                          ).colorScheme.outline.withOpacity(0.4),
+                          ).colorScheme.outline.withValues(alpha: 0.4),
                         ),
                         borderRadius: BorderRadius.circular(20),
                         color: Theme.of(context).colorScheme.surface,
@@ -117,9 +118,8 @@ class _SchemeDetailViewState extends ConsumerState<SchemeDetailView> {
                                 fontWeight: FontWeight.w600,
                                 color: isEnglish
                                     ? Colors.white
-                                    : Theme.of(
-                                        context,
-                                      ).colorScheme.onSurface.withOpacity(0.6),
+                                    : Theme.of(context).colorScheme.onSurface
+                                          .withValues(alpha: 0.6),
                               ),
                             ),
                           ),
@@ -144,9 +144,8 @@ class _SchemeDetailViewState extends ConsumerState<SchemeDetailView> {
                                 fontWeight: FontWeight.w600,
                                 color: !isEnglish
                                     ? Colors.white
-                                    : Theme.of(
-                                        context,
-                                      ).colorScheme.onSurface.withOpacity(0.6),
+                                    : Theme.of(context).colorScheme.onSurface
+                                          .withValues(alpha: 0.6),
                               ),
                             ),
                           ),
@@ -196,6 +195,50 @@ class _SchemeDetailViewState extends ConsumerState<SchemeDetailView> {
           },
         ),
       ),
+      floatingActionButton: schemeAsync.whenOrNull(
+        data: (scheme) => Padding(
+          padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+          child: Consumer(
+            builder: (context, ref, child) {
+              final selectedAmount = ref.watch(selectedPaymentAmountProvider);
+
+              return Material(
+                color: Palette.primaryColor,
+                borderRadius: BorderRadius.circular(w * 0.04),
+                elevation: 4,
+                shadowColor: Palette.primaryColor.withValues(alpha: 0.3),
+                child: InkWell(
+                  onTap: () {
+                    if (!AuthGuard.requireAuth(context, ref)) return;
+                    context.push(
+                      SchemeJoiningView.routePath(
+                        schemeId: scheme.schemeId,
+                        amount: selectedAmount,
+                      ),
+                    );
+                  },
+                  borderRadius: BorderRadius.circular(w * 0.04),
+                  child: Container(
+                    height: h * 0.06,
+                    width: w,
+                    padding: EdgeInsets.symmetric(vertical: h * 0.018),
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Join Now',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: w * 0.04,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -283,16 +326,30 @@ class _SchemeDetailViewState extends ConsumerState<SchemeDetailView> {
         ],
 
         // Benefit Calculator Section
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-          child: _ExpandableSection(
-            title: 'Scheme Benefit Calculator',
-            child: SmartPlusCalculatorWidget(
-              schemeId: scheme.schemeId,
-              schemeName: scheme.name,
+        if (scheme.schemeId == '1001') ...[
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+            child: _ExpandableSection(
+              title: 'Scheme Benefit Calculator',
+              child: SmartPlusCalculatorWidget(
+                schemeId: scheme.schemeId,
+                schemeName: scheme.name,
+              ),
             ),
           ),
-        ),
+        ],
+        if (scheme.schemeId == '1002') ...[
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: w * 0.04),
+            child: _ExpandableSection(
+              title: 'Scheme Benefit Calculator',
+              child: TieredBenefitCalculatorWidget(
+                schemeId: scheme.schemeId,
+                schemeName: scheme.name,
+              ),
+            ),
+          ),
+        ],
 
         // Terms and Conditions
         if (scheme.termsAndConditions.isNotEmpty) ...[
@@ -340,48 +397,7 @@ class _SchemeDetailViewState extends ConsumerState<SchemeDetailView> {
           SizedBox(height: h * 0.01),
         ],
 
-        /// Join Button
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: w * 0.04),
-          child: Consumer(
-            builder: (context, ref, child) {
-              final selectedAmount = ref.watch(selectedPaymentAmountProvider);
-
-              return Material(
-                color: Palette.primaryColor,
-                borderRadius: BorderRadius.circular(w * 0.04),
-                elevation: 2,
-                shadowColor: Palette.primaryColor.withOpacity(0.3),
-                child: InkWell(
-                  onTap: () {
-                    if (!AuthGuard.requireAuth(context, ref)) return;
-                    context.push(
-                      SchemeJoiningView.routePath(
-                        schemeId: scheme.schemeId,
-                        amount: selectedAmount,
-                      ),
-                    );
-                  },
-                  borderRadius: BorderRadius.circular(w * 0.04),
-                  child: Container(
-                    width: w,
-                    padding: EdgeInsets.symmetric(vertical: h * 0.018),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Join Now',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontSize: w * 0.04,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        SizedBox(height: h * 0.03),
+        SizedBox(height: h * 0.1),
       ],
     );
   }
@@ -421,30 +437,12 @@ class _SchemeImagesCarouselState extends State<_SchemeImagesCarousel> {
   @override
   Widget build(BuildContext context) {
     if (widget.images.isEmpty) {
-      /*
       return Container(
         width: widget.width,
         height: widget.height,
         color: Colors.grey[300],
         child: const Center(
           child: Icon(Icons.image, color: Colors.grey, size: 40),
-        ),
-      );
-      */
-      return SizedBox(
-        width: widget.width,
-        height: widget.height,
-        child: Image.asset(
-          "assets/banner/goldScheme.png",
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return Container(
-              color: Colors.grey[300],
-              child: const Center(
-                child: Icon(Icons.broken_image, color: Colors.grey, size: 40),
-              ),
-            );
-          },
         ),
       );
     }
@@ -464,11 +462,12 @@ class _SchemeImagesCarouselState extends State<_SchemeImagesCarousel> {
             },
             itemCount: widget.images.length,
             itemBuilder: (context, index) {
-              /*
               final imageUrl = widget.images[index].imageUrl;
 
               if (imageUrl == null || imageUrl.isEmpty) {
                 return Container(
+                  width: widget.width,
+                  height: widget.height,
                   color: Colors.grey[300],
                   child: const Center(
                     child: Icon(Icons.image, color: Colors.grey, size: 40),
@@ -485,36 +484,29 @@ class _SchemeImagesCarouselState extends State<_SchemeImagesCarousel> {
                   return Shimmer.fromColors(
                     baseColor: Colors.grey[300]!,
                     highlightColor: Colors.grey[100]!,
-                    child: Container(color: Colors.grey[300]),
-                  );
-                },
-                errorWidget: (context, url, error) {
-                  return Container(
-                    color: Colors.grey[300],
-                    child: const Center(
-                      child: Icon(
-                        Icons.broken_image,
-                        color: Colors.grey,
-                        size: 40,
-                      ),
+                    child: Container(
+                      width: widget.width,
+                      height: widget.height,
+                      color: Colors.grey[300],
                     ),
                   );
                 },
-              );
-              */
-              return Image.asset(
-                "assets/banner/goldScheme.png",
-                fit: BoxFit.cover,
-                width: widget.width,
-                height: widget.height,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Colors.grey[300],
-                    child: const Center(
-                      child: Icon(
-                        Icons.broken_image,
-                        color: Colors.grey,
-                        size: 40,
+                errorWidget: (context, url, error) {
+                  return Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                    width: widget.width,
+                    height: widget.height,
+                    errorBuilder: (context, err, stack) => Container(
+                      width: widget.width,
+                      height: widget.height,
+                      color: Colors.grey[300],
+                      child: const Center(
+                        child: Icon(
+                          Icons.broken_image,
+                          color: Colors.grey,
+                          size: 40,
+                        ),
                       ),
                     ),
                   );
@@ -541,7 +533,7 @@ class _SchemeImagesCarouselState extends State<_SchemeImagesCarousel> {
                         shape: BoxShape.circle,
                         color: _currentIndex == index
                             ? Colors.white
-                            : Colors.white.withOpacity(0.5),
+                            : Colors.white.withValues(alpha: 0.5),
                       ),
                     ),
                   ),
@@ -613,12 +605,12 @@ class _ExpandableSectionState extends State<_ExpandableSection>
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Palette.blackColor.withOpacity(0.06),
+          color: Palette.blackColor.withValues(alpha: 0.06),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -653,7 +645,7 @@ class _ExpandableSectionState extends State<_ExpandableSection>
                       child: Container(
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: Palette.primaryColor.withOpacity(0.08),
+                          color: Palette.primaryColor.withValues(alpha: 0.08),
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(

@@ -138,7 +138,7 @@ class _StepHeader extends StatelessWidget {
                 subtitle,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontSize: w * 0.035,
-                  color: Palette.blackColor.withOpacity(0.5),
+                  color: Palette.blackColor.withValues(alpha: 0.5),
                   height: 1.4,
                 ),
               ),
@@ -224,7 +224,9 @@ class NomineeDropdownSection extends ConsumerWidget {
                     children: [
                       CircleAvatar(
                         radius: 14,
-                        backgroundColor: Palette.primaryColor.withOpacity(0.1),
+                        backgroundColor: Palette.primaryColor.withValues(
+                          alpha: 0.1,
+                        ),
                         child: Text(
                           nominee.nomineeName.isNotEmpty
                               ? nominee.nomineeName[0].toUpperCase()
@@ -307,11 +309,11 @@ class _EmptyNomineeCard extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Palette.primaryColor.withOpacity(0.06), Colors.white],
+          colors: [Palette.primaryColor.withValues(alpha: 0.06), Colors.white],
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Palette.primaryColor.withOpacity(0.18),
+          color: Palette.primaryColor.withValues(alpha: 0.18),
           width: 1.5,
         ),
       ),
@@ -321,7 +323,7 @@ class _EmptyNomineeCard extends StatelessWidget {
             width: w * 0.16,
             height: w * 0.16,
             decoration: BoxDecoration(
-              color: Palette.primaryColor.withOpacity(0.1),
+              color: Palette.primaryColor.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -345,7 +347,7 @@ class _EmptyNomineeCard extends StatelessWidget {
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontSize: w * 0.034,
-              color: Palette.blackColor.withOpacity(0.55),
+              color: Palette.blackColor.withValues(alpha: 0.55),
               height: 1.5,
             ),
           ),
@@ -409,9 +411,9 @@ class BranchDropdownSection extends ConsumerWidget {
           return Container(
             padding: EdgeInsets.all(SizeConfig.w(context, 16)),
             decoration: BoxDecoration(
-              color: Colors.orange.withOpacity(0.05),
+              color: Colors.orange.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.orange.withOpacity(0.3)),
+              border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
             ),
             child: Row(
               children: [
@@ -456,7 +458,7 @@ class BranchDropdownSection extends ConsumerWidget {
                     width: 28,
                     height: 28,
                     decoration: BoxDecoration(
-                      color: Palette.primaryColor.withOpacity(0.08),
+                      color: Palette.primaryColor.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Icon(

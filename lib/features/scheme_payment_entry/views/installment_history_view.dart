@@ -120,7 +120,7 @@ class _InstallmentHistoryViewState
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: SizeConfig.w(context, 16),
             offset: Offset(0, SizeConfig.h(context, 4)),
           ),
@@ -155,7 +155,7 @@ class _InstallmentHistoryViewState
                           vertical: SizeConfig.h(context, 3),
                         ),
                         decoration: BoxDecoration(
-                          color: Palette.primaryColor.withOpacity(0.1),
+                          color: Palette.primaryColor.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(

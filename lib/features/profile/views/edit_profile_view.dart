@@ -239,7 +239,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView>
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: c.withOpacity(0.08),
+                color: c.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(icon, color: c, size: 20),
@@ -373,7 +373,9 @@ class _EditProfileViewState extends ConsumerState<EditProfileView>
                                   gradient: LinearGradient(
                                     colors: [
                                       Palette.primaryColor,
-                                      Palette.primaryColor.withOpacity(0.4),
+                                      Palette.primaryColor.withValues(
+                                        alpha: 0.4,
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -412,7 +414,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView>
                                       boxShadow: [
                                         BoxShadow(
                                           color: Palette.primaryColor
-                                              .withOpacity(0.4),
+                                              .withValues(alpha: 0.4),
                                           blurRadius: 8,
                                           offset: const Offset(0, 3),
                                         ),
@@ -637,7 +639,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView>
                               backgroundColor: Palette.primaryColor,
                               foregroundColor: Colors.white,
                               disabledBackgroundColor: Palette.primaryColor
-                                  .withOpacity(0.6),
+                                  .withValues(alpha: 0.6),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
                               ),
@@ -702,7 +704,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView>
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),

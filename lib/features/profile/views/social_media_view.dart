@@ -138,7 +138,7 @@ class _SocialMediaTile extends StatelessWidget {
       width: SizeConfig.w(context, 44),
       height: SizeConfig.w(context, 44),
       decoration: BoxDecoration(
-        color: Palette.primaryColor.withOpacity(0.08),
+        color: Palette.primaryColor.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(SizeConfig.w(context, 10)),
       ),
       child: Icon(

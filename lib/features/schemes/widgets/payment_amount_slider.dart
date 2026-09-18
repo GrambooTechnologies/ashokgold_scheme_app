@@ -60,9 +60,11 @@ class _PaymentAmountSliderState extends State<PaymentAmountSlider> {
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             activeTrackColor: Palette.primaryColor,
-            inactiveTrackColor: Palette.cardBackgroundColor.withOpacity(0.2),
+            inactiveTrackColor: Palette.cardBackgroundColor.withValues(
+              alpha: 0.2,
+            ),
             thumbColor: Palette.primaryColor,
-            overlayColor: Palette.cardBackgroundColor.withOpacity(0.2),
+            overlayColor: Palette.cardBackgroundColor.withValues(alpha: 0.2),
             trackHeight: 6.0,
             thumbShape: RoundSliderThumbShape(enabledThumbRadius: w * 0.03),
             overlayShape: RoundSliderOverlayShape(overlayRadius: w * 0.01),
@@ -129,7 +131,7 @@ class _PaymentAmountSliderState extends State<PaymentAmountSlider> {
                 borderRadius: BorderRadius.circular(w * 0.02),
                 color: Palette.backgroundColor,
                 border: Border.all(
-                  color: Palette.primaryColor.withOpacity(0.1),
+                  color: Palette.primaryColor.withValues(alpha: 0.1),
                   width: 1,
                 ),
               ),

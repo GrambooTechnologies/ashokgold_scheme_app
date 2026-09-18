@@ -199,7 +199,7 @@ class _InstallmentPaymentPageState
                   fontWeight: FontWeight.w600,
                   color: isEditable
                       ? Palette.primaryColor
-                      : Palette.primaryColor.withOpacity(0.6),
+                      : Palette.primaryColor.withValues(alpha: 0.6),
                   letterSpacing: SizeConfig.w(context, 1),
                 ),
                 decoration: InputDecoration(
@@ -210,7 +210,7 @@ class _InstallmentPaymentPageState
                     fontWeight: FontWeight.w600,
                     color: isEditable
                         ? Palette.primaryColor
-                        : Palette.primaryColor.withOpacity(0.6),
+                        : Palette.primaryColor.withValues(alpha: 0.6),
                   ),
                 ),
                 onChanged: isEditable ? (_) => setState(() {}) : null,
@@ -244,7 +244,7 @@ class _InstallmentPaymentPageState
                   'Min: ₹${minAmount.toStringAsFixed(2)}  •  Max: ₹${maxAmount.toStringAsFixed(2)}',
                   style: TextStyle(
                     fontSize: SizeConfig.w(context, 12),
-                    color: Palette.primaryColor.withOpacity(0.7),
+                    color: Palette.primaryColor.withValues(alpha: 0.7),
                     fontWeight: FontWeight.w400,
                   ),
                   textAlign: TextAlign.center,
@@ -260,7 +260,7 @@ class _InstallmentPaymentPageState
                     vertical: SizeConfig.h(context, 8),
                   ),
                   decoration: BoxDecoration(
-                    color: Palette.primaryColor.withOpacity(0.1),
+                    color: Palette.primaryColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(

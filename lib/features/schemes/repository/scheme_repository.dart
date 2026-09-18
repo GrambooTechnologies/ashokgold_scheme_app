@@ -9,6 +9,7 @@ import 'package:ashokgold_scheme_app/features/schemes/models/scheme_detail_respo
 import 'package:ashokgold_scheme_app/features/schemes/models/scheme_model.dart';
 import 'package:ashokgold_scheme_app/features/schemes/models/scheme_payment_rule_model.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 
@@ -28,6 +29,8 @@ class SchemeRepository {
       if (response.statusCode == SuccessStatusCode.ok) {
         final res = handleApiResponse(response);
 
+        debugPrint('--> [getAllSchemes] Raw API data: ${res['data']}');
+
         final List<dynamic> data = res['data'] as List<dynamic>;
         final schemes = data
             .map((json) => SchemeModel.fromJson(json as Map<String, dynamic>))
@@ -38,6 +41,7 @@ class SchemeRepository {
 
       throw Exception('Failed to fetch schemes');
     } catch (e, s) {
+      debugPrint('--> [getAllSchemes] Error: $e\n$s');
       return left(handleErrors(e, s));
     }
   }

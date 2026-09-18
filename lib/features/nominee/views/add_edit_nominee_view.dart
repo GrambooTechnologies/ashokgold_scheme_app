@@ -212,7 +212,7 @@ class _AddEditNomineeViewState extends ConsumerState<AddEditNomineeView>
                             backgroundColor: Palette.primaryColor,
                             foregroundColor: Colors.white,
                             disabledBackgroundColor: Palette.primaryColor
-                                .withOpacity(0.55),
+                                .withValues(alpha: 0.55),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
@@ -356,7 +356,7 @@ class _AddEditNomineeViewState extends ConsumerState<AddEditNomineeView>
           BoxShadow(
             color:
                 (isEditing ? const Color(0xFF7209B7) : const Color(0xFF1A1A2E))
-                    .withOpacity(0.3),
+                    .withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -373,7 +373,7 @@ class _AddEditNomineeViewState extends ConsumerState<AddEditNomineeView>
               height: w * 0.3,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.05),
+                color: Colors.white.withValues(alpha: 0.05),
               ),
             ),
           ),
@@ -382,7 +382,7 @@ class _AddEditNomineeViewState extends ConsumerState<AddEditNomineeView>
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.12),
+                  color: Colors.white.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Icon(

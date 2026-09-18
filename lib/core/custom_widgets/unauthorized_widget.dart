@@ -27,14 +27,14 @@ class UnauthorizedPromptWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(SizeConfig.w(context, 20)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.08),
+                color: Colors.black.withValues(alpha: 0.08),
                 blurRadius: SizeConfig.w(context, 30),
                 spreadRadius: 0,
                 offset: Offset(0, SizeConfig.h(context, 8)),
               ),
             ],
             border: Border.all(
-              color: Palette.primaryColor.withOpacity(0.1),
+              color: Palette.primaryColor.withValues(alpha: 0.1),
               width: 1,
             ),
           ),
@@ -48,15 +48,15 @@ class UnauthorizedPromptWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Palette.primaryColor.withOpacity(0.1),
-                      Palette.primaryColor.withOpacity(0.05),
+                      Palette.primaryColor.withValues(alpha: 0.1),
+                      Palette.primaryColor.withValues(alpha: 0.05),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Palette.primaryColor.withOpacity(0.2),
+                    color: Palette.primaryColor.withValues(alpha: 0.2),
                     width: 2,
                   ),
                 ),
@@ -89,8 +89,8 @@ class UnauthorizedPromptWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Palette.primaryColor.withOpacity(0.3),
-                      Palette.primaryColor.withOpacity(0.1),
+                      Palette.primaryColor.withValues(alpha: 0.3),
+                      Palette.primaryColor.withValues(alpha: 0.1),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(1),
@@ -108,12 +108,10 @@ class UnauthorizedPromptWidget extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: Colors.grey[50],
-                  borderRadius:
-                      BorderRadius.circular(SizeConfig.w(context, 16)),
-                  border: Border.all(
-                    color: Colors.grey[200]!,
-                    width: 1,
+                  borderRadius: BorderRadius.circular(
+                    SizeConfig.w(context, 16),
                   ),
+                  border: Border.all(color: Colors.grey[200]!, width: 1),
                 ),
                 child: Text(
                   message,
@@ -137,8 +135,9 @@ class UnauthorizedPromptWidget extends StatelessWidget {
                     child: Container(
                       height: SizeConfig.h(context, 52),
                       decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(SizeConfig.w(context, 16)),
+                        borderRadius: BorderRadius.circular(
+                          SizeConfig.w(context, 16),
+                        ),
                         border: Border.all(
                           color: Colors.grey[300]!,
                           width: 1.5,
@@ -148,8 +147,9 @@ class UnauthorizedPromptWidget extends StatelessWidget {
                       child: Material(
                         color: Colors.transparent,
                         child: InkWell(
-                          borderRadius:
-                              BorderRadius.circular(SizeConfig.w(context, 16)),
+                          borderRadius: BorderRadius.circular(
+                            SizeConfig.w(context, 16),
+                          ),
                           onTap: () => Navigator.of(context).pop(),
                           child: Center(
                             child: Row(
@@ -188,16 +188,19 @@ class UnauthorizedPromptWidget extends StatelessWidget {
                           gradient: LinearGradient(
                             colors: [
                               Palette.primaryColor,
-                              Palette.primaryColor.withOpacity(0.8),
+                              Palette.primaryColor.withValues(alpha: 0.8),
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
-                          borderRadius:
-                              BorderRadius.circular(SizeConfig.w(context, 16)),
+                          borderRadius: BorderRadius.circular(
+                            SizeConfig.w(context, 16),
+                          ),
                           boxShadow: [
                             BoxShadow(
-                              color: Palette.primaryColor.withOpacity(0.3),
+                              color: Palette.primaryColor.withValues(
+                                alpha: 0.3,
+                              ),
                               blurRadius: SizeConfig.w(context, 12),
                               offset: Offset(0, SizeConfig.h(context, 4)),
                             ),
@@ -207,7 +210,8 @@ class UnauthorizedPromptWidget extends StatelessWidget {
                           color: Colors.transparent,
                           child: InkWell(
                             borderRadius: BorderRadius.circular(
-                                SizeConfig.w(context, 16)),
+                              SizeConfig.w(context, 16),
+                            ),
                             onTap: onRetry,
                             child: Center(
                               child: Row(

@@ -71,7 +71,9 @@ class CustomDropdown<T> extends StatelessWidget {
       hintText: hint ?? label,
       prefixIcon: prefixIcon,
       filled: true,
-      fillColor: isDark ? Colors.white.withOpacity(0.1) : Colors.grey.shade50,
+      fillColor: isDark
+          ? Colors.white.withValues(alpha: 0.1)
+          : Colors.grey.shade50,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide.none,

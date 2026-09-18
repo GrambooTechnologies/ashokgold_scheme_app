@@ -5,7 +5,6 @@ import 'package:ashokgold_scheme_app/core/utilities/scale_size_utils.dart';
 import 'package:ashokgold_scheme_app/features/schemes/providers/scheme_provider.dart';
 import 'package:ashokgold_scheme_app/features/schemes/views/scheme_detail_view.dart';
 import 'package:ashokgold_scheme_app/features/schemes/widgets/scheme_card_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

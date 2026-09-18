@@ -270,7 +270,7 @@ class _Step2BillingAddressState extends ConsumerState<Step2BillingAddress> {
           style: TextStyle(
             fontSize: w * 0.036,
             fontWeight: FontWeight.w600,
-            color: Palette.blackColor.withOpacity(0.75),
+            color: Palette.blackColor.withValues(alpha: 0.75),
           ),
         ),
       ],
@@ -400,7 +400,7 @@ class _StepHeader extends StatelessWidget {
                 subtitle,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontSize: w * 0.034,
-                  color: Palette.blackColor.withOpacity(0.5),
+                  color: Palette.blackColor.withValues(alpha: 0.5),
                   height: 1.4,
                 ),
               ),
@@ -426,10 +426,10 @@ class _SavedAddressBanner extends StatelessWidget {
         vertical: SizeConfig.h(context, 10),
       ),
       decoration: BoxDecoration(
-        color: Palette.primaryColor.withOpacity(0.05),
+        color: Palette.primaryColor.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Palette.primaryColor.withOpacity(0.2),
+          color: Palette.primaryColor.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -439,7 +439,7 @@ class _SavedAddressBanner extends StatelessWidget {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: Palette.primaryColor.withOpacity(0.1),
+              color: Palette.primaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
@@ -465,7 +465,7 @@ class _SavedAddressBanner extends StatelessWidget {
                   'Tap Load to auto-fill your address',
                   style: TextStyle(
                     fontSize: w * 0.03,
-                    color: Palette.blackColor.withOpacity(0.5),
+                    color: Palette.blackColor.withValues(alpha: 0.5),
                   ),
                 ),
               ],
@@ -546,9 +546,9 @@ class _AutoFillInfoNote extends StatelessWidget {
         vertical: SizeConfig.h(context, 8),
       ),
       decoration: BoxDecoration(
-        color: Colors.blue.withOpacity(0.05),
+        color: Colors.blue.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.blue.withOpacity(0.15)),
+        border: Border.all(color: Colors.blue.withValues(alpha: 0.15)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -18,11 +18,10 @@ class ContactSupportButton extends StatelessWidget {
         height: SizeConfig.h(context, 42),
         margin: const EdgeInsets.symmetric(horizontal: 70),
         decoration: BoxDecoration(
-            color: Palette.cardBackgroundColor.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(
-              SizeConfig.w(context, 13),
-            ),
-            border: Border.all(color: Palette.cardBackgroundColor, width: 0.5)),
+          color: Palette.cardBackgroundColor.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(SizeConfig.w(context, 13)),
+          border: Border.all(color: Palette.cardBackgroundColor, width: 0.5),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

@@ -29,13 +29,13 @@ class SchemeJoiningNavigationButtons extends StatelessWidget {
         color: Palette.whiteColor,
         border: Border(
           top: BorderSide(
-            color: Palette.shadowColor.withOpacity(0.08),
+            color: Palette.shadowColor.withValues(alpha: 0.08),
             width: 1,
           ),
         ),
         boxShadow: [
           BoxShadow(
-            color: Palette.shadowColor.withOpacity(0.06),
+            color: Palette.shadowColor.withValues(alpha: 0.06),
             blurRadius: 16,
             offset: const Offset(0, -4),
           ),
@@ -80,7 +80,7 @@ class _BackButton extends StatelessWidget {
         side: BorderSide(color: Palette.primaryColor, width: 1.5),
         padding: EdgeInsets.symmetric(vertical: SizeConfig.h(context, 14)),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        backgroundColor: Palette.primaryColor.withOpacity(0.04),
+        backgroundColor: Palette.primaryColor.withValues(alpha: 0.04),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -127,13 +127,13 @@ class _NextButton extends StatelessWidget {
               ? const Color(0xFF0F6E56)
               : Palette.primaryColor,
           foregroundColor: Palette.whiteColor,
-          disabledBackgroundColor: Palette.primaryColor.withOpacity(0.5),
+          disabledBackgroundColor: Palette.primaryColor.withValues(alpha: 0.5),
           padding: EdgeInsets.symmetric(vertical: SizeConfig.h(context, 14)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
           elevation: isLoading ? 0 : 2,
-          shadowColor: Palette.primaryColor.withOpacity(0.4),
+          shadowColor: Palette.primaryColor.withValues(alpha: 0.4),
         ),
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),

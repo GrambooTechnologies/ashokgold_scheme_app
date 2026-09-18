@@ -1,8 +1,10 @@
-import 'package:ashokgold_scheme_app/features/schemes/models/scheme_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../core/theme/theme.dart';
+import '../models/scheme_model.dart';
 
 class SchemeCardWidget extends StatelessWidget {
   final SchemeModel scheme;
@@ -18,6 +20,11 @@ class SchemeCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
+    final imageUrl = scheme.displayImageUrl;
+
+    debugPrint(
+      '--> [SchemeCardWidget] id: ${scheme.schemeId}, name: ${scheme.name}, displayImageUrl: "$imageUrl", imageList: ${scheme.imageList.map((e) => e.imageUrl).toList()}',
+    );
 
     return GestureDetector(
       onTap: onTap,
@@ -35,24 +42,62 @@ class SchemeCardWidget extends StatelessWidget {
               // Background Image
               ClipRRect(
                 borderRadius: BorderRadius.circular(w * 0.05),
-                child: Image.asset(
-                  "assets/banner/goldScheme.png",
-                  fit: BoxFit.cover,
-                  width: w,
-                  height: h * 0.24,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      color: Colors.grey[300],
-                      child: const Center(
-                        child: Icon(
-                          Icons.broken_image,
-                          color: Colors.grey,
-                          size: 40,
+                child: (imageUrl != null && imageUrl.isNotEmpty)
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl,
+                        fit: BoxFit.cover,
+                        width: w,
+                        height: h * 0.24,
+                        placeholder: (context, url) => Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            width: w,
+                            height: h * 0.24,
+                            color: Colors.grey[300],
+                          ),
+                        ),
+                        errorWidget: (context, url, error) {
+                          debugPrint(
+                            '--> [CachedNetworkImage ERROR] url: $url, error: $error',
+                          );
+                          return Image.network(
+                            imageUrl,
+                            fit: BoxFit.cover,
+                            width: w,
+                            height: h * 0.24,
+                            errorBuilder: (context, err, stack) {
+                              debugPrint(
+                                '--> [Image.network ERROR] url: $imageUrl, error: $err',
+                              );
+                              return Container(
+                                width: w,
+                                height: h * 0.24,
+                                color: Colors.grey[300],
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.broken_image,
+                                    color: Colors.grey,
+                                    size: 40,
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      )
+                    : Container(
+                        width: w,
+                        height: h * 0.24,
+                        color: Colors.grey[300],
+                        child: const Center(
+                          child: Icon(
+                            Icons.image,
+                            color: Colors.grey,
+                            size: 40,
+                          ),
                         ),
                       ),
-                    );
-                  },
-                ),
               ),
               // Content Overlay
               Padding(

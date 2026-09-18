@@ -102,7 +102,7 @@ class _Step3AmountSelectionState extends ConsumerState<Step3AmountSelection> {
                   style: TextStyle(
                     fontSize: w * 0.036,
                     fontWeight: FontWeight.w600,
-                    color: Palette.blackColor.withOpacity(0.75),
+                    color: Palette.blackColor.withValues(alpha: 0.75),
                   ),
                 ),
                 SizedBox(height: h * 0.008),
@@ -203,7 +203,7 @@ class _Step3AmountSelectionState extends ConsumerState<Step3AmountSelection> {
             Text(
               'Loading payment rules…',
               style: TextStyle(
-                color: Palette.blackColor.withOpacity(0.5),
+                color: Palette.blackColor.withValues(alpha: 0.5),
                 fontSize: MediaQuery.of(context).size.width * 0.035,
               ),
             ),
@@ -299,7 +299,7 @@ class _StepHeader extends StatelessWidget {
                 subtitle,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontSize: w * 0.034,
-                  color: Palette.blackColor.withOpacity(0.5),
+                  color: Palette.blackColor.withValues(alpha: 0.5),
                   height: 1.4,
                 ),
               ),
@@ -328,10 +328,10 @@ class _PaymentRulesCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(w * 0.04),
       decoration: BoxDecoration(
-        color: Palette.primaryColor.withOpacity(0.04),
+        color: Palette.primaryColor.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: Palette.primaryColor.withOpacity(0.2),
+          color: Palette.primaryColor.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -343,7 +343,7 @@ class _PaymentRulesCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: Palette.primaryColor.withOpacity(0.1),
+                  color: Palette.primaryColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -410,21 +410,25 @@ class _RuleRow extends StatelessWidget {
     final w = MediaQuery.of(context).size.width;
     return Row(
       children: [
-        Icon(icon, size: 14, color: Palette.primaryColor.withOpacity(0.6)),
+        Icon(
+          icon,
+          size: 14,
+          color: Palette.primaryColor.withValues(alpha: 0.6),
+        ),
         SizedBox(width: 6),
         Expanded(
           child: Text(
             label,
             style: TextStyle(
               fontSize: w * 0.035,
-              color: Palette.blackColor.withOpacity(0.6),
+              color: Palette.blackColor.withValues(alpha: 0.6),
             ),
           ),
         ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
           decoration: BoxDecoration(
-            color: Palette.primaryColor.withOpacity(0.08),
+            color: Palette.primaryColor.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(6),
           ),
           child: Text(
@@ -479,7 +483,7 @@ class _QuickAmountChips extends StatelessWidget {
           style: TextStyle(
             fontSize: w * 0.033,
             fontWeight: FontWeight.w600,
-            color: Palette.blackColor.withOpacity(0.5),
+            color: Palette.blackColor.withValues(alpha: 0.5),
           ),
         ),
         SizedBox(height: SizeConfig.h(context, 8)),
@@ -495,10 +499,10 @@ class _QuickAmountChips extends StatelessWidget {
                   vertical: 8,
                 ),
                 decoration: BoxDecoration(
-                  color: Palette.primaryColor.withOpacity(0.06),
+                  color: Palette.primaryColor.withValues(alpha: 0.06),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                    color: Palette.primaryColor.withOpacity(0.25),
+                    color: Palette.primaryColor.withValues(alpha: 0.25),
                     width: 1,
                   ),
                 ),
@@ -530,9 +534,9 @@ class _ValidationNote extends StatelessWidget {
         vertical: SizeConfig.h(context, 10),
       ),
       decoration: BoxDecoration(
-        color: Colors.blue.withOpacity(0.05),
+        color: Colors.blue.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.blue.withOpacity(0.15)),
+        border: Border.all(color: Colors.blue.withValues(alpha: 0.15)),
       ),
       child: Row(
         children: [

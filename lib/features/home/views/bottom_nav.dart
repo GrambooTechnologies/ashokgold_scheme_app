@@ -103,7 +103,7 @@ class _BottomNavState extends ConsumerState<BottomNav>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.15),
+            color: Colors.black.withValues(alpha: 0.15),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -174,7 +174,7 @@ class CustomBottomNav extends StatelessWidget {
           gradient: LinearGradient(
             colors: [
               Palette.primaryColor,
-              Palette.primaryColor.withOpacity(0.85),
+              Palette.primaryColor.withValues(alpha: 0.85),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -182,7 +182,7 @@ class CustomBottomNav extends StatelessWidget {
           borderRadius: BorderRadius.circular(w * (14 / 390)),
           boxShadow: [
             BoxShadow(
-              color: Palette.primaryColor.withOpacity(0.28),
+              color: Palette.primaryColor.withValues(alpha: 0.28),
               blurRadius: w * (10 / 390),
               offset: Offset(0, h * (3 / 844)),
             ),
@@ -210,7 +210,7 @@ class CustomBottomNav extends StatelessWidget {
         borderRadius: BorderRadius.circular(w * (24 / 390)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.09),
+            color: Colors.black.withValues(alpha: 0.09),
             blurRadius: w * (20 / 390),
             offset: Offset(0, h * (8 / 844)),
           ),

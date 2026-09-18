@@ -86,7 +86,7 @@ class PaymentTriesView extends ConsumerWidget {
         border: Border(left: BorderSide(color: statusColor, width: 4)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: SizeConfig.w(context, 16),
             offset: Offset(0, SizeConfig.h(context, 4)),
           ),
@@ -108,7 +108,7 @@ class PaymentTriesView extends ConsumerWidget {
                   width: SizeConfig.w(context, 30),
                   height: SizeConfig.w(context, 30),
                   decoration: BoxDecoration(
-                    color: Palette.primaryColor.withOpacity(0.1),
+                    color: Palette.primaryColor.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   alignment: Alignment.center,
@@ -382,7 +382,7 @@ class PaymentTriesView extends ConsumerWidget {
           vertical: SizeConfig.h(context, 4),
         ),
         decoration: BoxDecoration(
-          color: chipColor.withOpacity(0.08),
+          color: chipColor.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(6),
         ),
         child: Row(
@@ -402,7 +402,7 @@ class PaymentTriesView extends ConsumerWidget {
             Icon(
               CupertinoIcons.doc_on_clipboard,
               size: SizeConfig.w(context, 11),
-              color: chipColor.withOpacity(0.6),
+              color: chipColor.withValues(alpha: 0.6),
             ),
           ],
         ),
@@ -423,7 +423,7 @@ class PaymentTriesView extends ConsumerWidget {
         vertical: SizeConfig.h(context, 4),
       ),
       decoration: BoxDecoration(
-        color: chipColor.withOpacity(0.08),
+        color: chipColor.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Row(
@@ -451,7 +451,7 @@ class PaymentTriesView extends ConsumerWidget {
         vertical: SizeConfig.h(context, 3),
       ),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(

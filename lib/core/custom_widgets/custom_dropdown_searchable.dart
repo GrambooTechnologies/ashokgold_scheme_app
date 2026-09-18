@@ -117,7 +117,9 @@ class _CustomSearchableDropdownState<T>
       labelText: widget.label,
       prefixIcon: widget.prefixIcon,
       filled: true,
-      fillColor: isDark ? Colors.white.withOpacity(0.1) : Colors.grey.shade50,
+      fillColor: isDark
+          ? Colors.white.withValues(alpha: 0.1)
+          : Colors.grey.shade50,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide.none,
@@ -128,29 +130,17 @@ class _CustomSearchableDropdownState<T>
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: Palette.primaryColor,
-          width: 2,
-        ),
+        borderSide: BorderSide(color: Palette.primaryColor, width: 2),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: Palette.redColor,
-          width: 2,
-        ),
+        borderSide: BorderSide(color: Palette.redColor, width: 2),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: Palette.redColor,
-          width: 2,
-        ),
+        borderSide: BorderSide(color: Palette.redColor, width: 2),
       ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 16,
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       labelStyle: const TextStyle(
         fontFamily: 'Urbanist',
         fontSize: 14,
@@ -165,43 +155,25 @@ class _CustomSearchableDropdownState<T>
       prefixIcon: widget.prefixIcon,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: Colors.grey.shade300,
-          width: 1,
-        ),
+        borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: Colors.grey.shade300,
-          width: 1,
-        ),
+        borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: Palette.primaryColor,
-          width: 2,
-        ),
+        borderSide: BorderSide(color: Palette.primaryColor, width: 2),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: Palette.redColor,
-          width: 1,
-        ),
+        borderSide: BorderSide(color: Palette.redColor, width: 1),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: Palette.redColor,
-          width: 2,
-        ),
+        borderSide: BorderSide(color: Palette.redColor, width: 2),
       ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 16,
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       labelStyle: const TextStyle(
         fontFamily: 'Urbanist',
         fontSize: 14,
@@ -215,39 +187,21 @@ class _CustomSearchableDropdownState<T>
       labelText: widget.label,
       prefixIcon: widget.prefixIcon,
       border: UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Colors.grey.shade300,
-          width: 1,
-        ),
+        borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
       ),
       enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Colors.grey.shade300,
-          width: 1,
-        ),
+        borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
       ),
       focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Palette.primaryColor,
-          width: 2,
-        ),
+        borderSide: BorderSide(color: Palette.primaryColor, width: 2),
       ),
       errorBorder: UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Palette.redColor,
-          width: 1,
-        ),
+        borderSide: BorderSide(color: Palette.redColor, width: 1),
       ),
       focusedErrorBorder: UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Palette.redColor,
-          width: 2,
-        ),
+        borderSide: BorderSide(color: Palette.redColor, width: 2),
       ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 0,
-        vertical: 16,
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 16),
       labelStyle: const TextStyle(
         fontFamily: 'Urbanist',
         fontSize: 14,
@@ -312,24 +266,15 @@ class _CustomSearchableDropdownState<T>
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(
-                color: Colors.grey.shade300,
-                width: 1,
-              ),
+              borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(
-                color: Colors.grey.shade300,
-                width: 1,
-              ),
+              borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(
-                color: Palette.primaryColor,
-                width: 2,
-              ),
+              borderSide: BorderSide(color: Palette.primaryColor, width: 2),
             ),
             prefixIcon: const Icon(
               Icons.search,
@@ -357,11 +302,7 @@ class DropdownItem<T> {
   final String label;
   final Widget? icon;
 
-  const DropdownItem({
-    required this.value,
-    required this.label,
-    this.icon,
-  });
+  const DropdownItem({required this.value, required this.label, this.icon});
 
   @override
   String toString() => label;

@@ -55,7 +55,7 @@ class GoldRateCard extends ConsumerWidget {
                         style: TextStyle(
                           fontSize: w * .022,
                           fontFamily: 'Urbanist',
-                          color: Palette.blackColor.withOpacity(0.55),
+                          color: Palette.blackColor.withValues(alpha: 0.55),
                           fontWeight: FontWeight.w700,
                           letterSpacing: 1.0,
                         ),
@@ -78,7 +78,9 @@ class GoldRateCard extends ConsumerWidget {
                                 fontSize: w * .022,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'Urbanist',
-                                color: Palette.blackColor.withOpacity(0.7),
+                                color: Palette.blackColor.withValues(
+                                  alpha: 0.7,
+                                ),
                               ),
                             ),
                           ],
@@ -97,7 +99,7 @@ class GoldRateCard extends ConsumerWidget {
                   fontSize: w * .022,
                   fontWeight: FontWeight.w500,
                   fontFamily: 'Urbanist',
-                  color: Palette.blackColor.withOpacity(0.4),
+                  color: Palette.blackColor.withValues(alpha: 0.4),
                 ),
               ),
             ],

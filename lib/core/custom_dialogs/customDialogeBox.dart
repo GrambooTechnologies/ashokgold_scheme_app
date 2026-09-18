@@ -24,7 +24,7 @@ class AppDialog {
       context: context,
       barrierDismissible: barrierDismissible,
       barrierLabel: "Dialog",
-      barrierColor: Colors.black.withOpacity(0.45),
+      barrierColor: Colors.black.withValues(alpha: 0.45),
       transitionDuration: const Duration(milliseconds: 220),
       pageBuilder: (_, _, _) => const SizedBox(),
       transitionBuilder: (context, anim, _, _) {
@@ -49,14 +49,12 @@ class AppDialog {
 
   // ================= QUICK METHODS =================
 
-  static Future<bool?> showDeleteAccount({
-    required BuildContext context,
-  }) {
+  static Future<bool?> showDeleteAccount({required BuildContext context}) {
     return showConfirmation(
       context: context,
       title: 'Delete Account',
       message:
-      'Your account will be deleted within 30 days. You can log back in anytime during this period to cancel the request. After that, all your data will be permanently removed.',
+          'Your account will be deleted within 30 days. You can log back in anytime during this period to cancel the request. After that, all your data will be permanently removed.',
       confirmText: 'Delete',
       cancelText: 'Cancel',
       type: DialogType.destructive,
@@ -71,16 +69,15 @@ class AppDialog {
     return showConfirmation(
       context: context,
       title: 'Delete $itemName',
-      message: customMessage ??
+      message:
+          customMessage ??
           'This action cannot be undone. Do you want to continue?',
       confirmText: 'Delete',
       type: DialogType.destructive,
     );
   }
 
-  static Future<bool?> showLogoutConfirmation({
-    required BuildContext context,
-  }) {
+  static Future<bool?> showLogoutConfirmation({required BuildContext context}) {
     return showConfirmation(
       context: context,
       title: 'Logout',
@@ -158,7 +155,7 @@ class _DialogCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(22),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.18),
+                color: Colors.black.withValues(alpha: 0.18),
                 blurRadius: 28,
                 offset: const Offset(0, 12),
               ),
@@ -168,17 +165,11 @@ class _DialogCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               // ================= ICON =================
-
-              _DialogIcon(
-                color: color,
-                type: type,
-                customIcon: icon,
-              ),
+              _DialogIcon(color: color, type: type, customIcon: icon),
 
               const SizedBox(height: 18),
 
               // ================= TITLE =================
-
               Text(
                 title,
                 textAlign: TextAlign.center,
@@ -193,7 +184,6 @@ class _DialogCard extends StatelessWidget {
               const SizedBox(height: 10),
 
               // ================= MESSAGE =================
-
               Text(
                 message,
                 textAlign: TextAlign.center,
@@ -208,7 +198,6 @@ class _DialogCard extends StatelessWidget {
               const SizedBox(height: 26),
 
               // ================= BUTTONS =================
-
               _DialogButtons(
                 confirmText: confirmText,
                 cancelText: cancelText,
@@ -230,11 +219,7 @@ class _DialogIcon extends StatelessWidget {
   final DialogType type;
   final Widget? customIcon;
 
-  const _DialogIcon({
-    required this.color,
-    required this.type,
-    this.customIcon,
-  });
+  const _DialogIcon({required this.color, required this.type, this.customIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -264,20 +249,14 @@ class _DialogIcon extends StatelessWidget {
         shape: BoxShape.circle,
         gradient: LinearGradient(
           colors: [
-            color.withOpacity(0.15),
-            color.withOpacity(0.05),
+            color.withValues(alpha: 0.15),
+            color.withValues(alpha: 0.05),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
       ),
-      child: Center(
-        child: Icon(
-          icon,
-          size: 32,
-          color: color,
-        ),
-      ),
+      child: Center(child: Icon(icon, size: 32, color: color)),
     );
   }
 }
@@ -347,7 +326,7 @@ class _PrimaryButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(
-              color: color.withOpacity(0.4),
+              color: color.withValues(alpha: 0.4),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -373,10 +352,7 @@ class _SecondaryButton extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
 
-  const _SecondaryButton({
-    required this.text,
-    required this.onTap,
-  });
+  const _SecondaryButton({required this.text, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

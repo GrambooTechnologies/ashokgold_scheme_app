@@ -22,7 +22,7 @@ class NotificationTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         color: isUnread
-            ? Palette.primaryColor.withOpacity(0.05)
+            ? Palette.primaryColor.withValues(alpha: 0.05)
             : Colors.transparent,
         padding: EdgeInsets.symmetric(
           horizontal: w * 0.045,
@@ -38,7 +38,7 @@ class NotificationTile extends StatelessWidget {
               decoration: BoxDecoration(
                 color: _typeColor(
                   notification.notificationType,
-                ).withOpacity(0.12),
+                ).withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -110,7 +110,7 @@ class NotificationTile extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: _typeColor(
                             notification.notificationType,
-                          ).withOpacity(0.1),
+                          ).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(

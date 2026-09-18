@@ -193,7 +193,7 @@ class _StepHeader extends StatelessWidget {
                 'Verify all details before proceeding to payment',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontSize: w * 0.034,
-                  color: Palette.blackColor.withOpacity(0.5),
+                  color: Palette.blackColor.withValues(alpha: 0.5),
                   height: 1.4,
                 ),
               ),
@@ -277,7 +277,7 @@ class _SchemeBannerCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: w * 0.033,
-                      color: Palette.blackColor.withOpacity(0.55),
+                      color: Palette.blackColor.withValues(alpha: 0.55),
                       height: 1.5,
                     ),
                   ),
@@ -305,7 +305,10 @@ class _GradientBanner extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Palette.primaryColor, Palette.primaryColor.withOpacity(0.6)],
+          colors: [
+            Palette.primaryColor,
+            Palette.primaryColor.withValues(alpha: 0.6),
+          ],
         ),
       ),
       child: Stack(
@@ -318,7 +321,7 @@ class _GradientBanner extends StatelessWidget {
               height: 120,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.06),
+                color: Colors.white.withValues(alpha: 0.06),
               ),
             ),
           ),
@@ -330,7 +333,7 @@ class _GradientBanner extends StatelessWidget {
               height: 80,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.06),
+                color: Colors.white.withValues(alpha: 0.06),
               ),
             ),
           ),
@@ -338,7 +341,7 @@ class _GradientBanner extends StatelessWidget {
             child: Icon(
               Icons.savings_outlined,
               size: 52,
-              color: Colors.white.withOpacity(0.4),
+              color: Colors.white.withValues(alpha: 0.4),
             ),
           ),
         ],
@@ -360,7 +363,7 @@ class _TagChip extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: w * 0.025, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Row(
@@ -434,7 +437,7 @@ class _InfoCard extends StatelessWidget {
         border: Border.all(color: Colors.grey[200]!, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -518,13 +521,13 @@ class _PaymentHighlightCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Palette.primaryColor.withOpacity(0.08),
-            Palette.primaryColor.withOpacity(0.03),
+            Palette.primaryColor.withValues(alpha: 0.08),
+            Palette.primaryColor.withValues(alpha: 0.03),
           ],
         ),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: Palette.primaryColor.withOpacity(0.2),
+          color: Palette.primaryColor.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -567,9 +570,9 @@ class _AddressCard extends StatelessWidget {
       return Container(
         padding: EdgeInsets.all(SizeConfig.w(context, 14)),
         decoration: BoxDecoration(
-          color: Colors.orange.withOpacity(0.05),
+          color: Colors.orange.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.orange.withOpacity(0.25)),
+          border: Border.all(color: Colors.orange.withValues(alpha: 0.25)),
         ),
         child: Row(
           children: [
@@ -596,7 +599,7 @@ class _AddressCard extends StatelessWidget {
         border: Border.all(color: Colors.grey[200]!, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -609,7 +612,7 @@ class _AddressCard extends StatelessWidget {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: Palette.primaryColor.withOpacity(0.08),
+              color: Palette.primaryColor.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
@@ -682,9 +685,9 @@ class _ConfirmationNotice extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(SizeConfig.w(context, 14)),
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(0.05),
+        color: Colors.green.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.green.withOpacity(0.2)),
+        border: Border.all(color: Colors.green.withValues(alpha: 0.2)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

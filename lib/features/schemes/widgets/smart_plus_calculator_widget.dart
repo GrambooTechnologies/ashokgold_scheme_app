@@ -23,6 +23,7 @@ class _SmartPlusCalculatorWidgetState extends ConsumerState<SmartPlusCalculatorW
   final double _minAmount = 500.0;
   final double _maxAmount = 50000.0; // maximum amount capped at 50000
   final int _months = 11;
+  double _makingChargePercent = 8.0; // default ornament making charge
   
   late TextEditingController _amountController;
   final FocusNode _focusNode = FocusNode();
@@ -79,20 +80,33 @@ class _SmartPlusCalculatorWidgetState extends ConsumerState<SmartPlusCalculatorW
 
     // Calculations:
     final double totalAccumulated = _monthlyAmount * _months;
-    const double makingChargePercent = 8.0; // 8% average making charge
-    final double makingChargeAmount = totalAccumulated * (makingChargePercent / 100.0);
     
-    // Normal jewelry gets full 8% discount
-    const double discountPercent = 8.0;
-    final double discountAmount = totalAccumulated * (discountPercent / 100.0);
+    // 5 percentage-point reduction benefit on making charges:
+    // If making charge <= 5%, new rate is 0% (discount rate = making charge rate).
+    // If making charge > 5%, new rate is making charge rate - 5% (discount rate = 5%).
+    final double discountPercent = _makingChargePercent <= 5.0 ? _makingChargePercent : 5.0;
+    final double netMakingChargePercent = _makingChargePercent - discountPercent;
     
-    final double totalJewelryValue = totalAccumulated + makingChargeAmount;
-    final double grandTotalPaid = totalAccumulated + (makingChargeAmount - discountAmount);
+    final double originalMakingChargeAmount = totalAccumulated * (_makingChargePercent / 100.0);
+    final double netMakingChargeAmount = totalAccumulated * (netMakingChargePercent / 100.0);
+    final double makingChargeSavings = totalAccumulated * (discountPercent / 100.0);
     
-    // Gold weight calculation: Grand Total divided by gold rate per gram
-    final double accumulatedWeight = goldRate > 0 ? grandTotalPaid / goldRate : 0.0;
-    final double benefitWeight = goldRate > 0 ? discountAmount / goldRate : 0.0;
-    final double paidWeight = goldRate > 0 ? totalAccumulated / goldRate : 0.0;
+    // Final purchase value = Gold value + Net Making Charges
+    final double finalPurchaseValue = totalAccumulated + netMakingChargeAmount;
+    // GST (3%) applicable on final purchase value
+    final double gstAmount = finalPurchaseValue * 0.03;
+    final double grandTotalWithScheme = finalPurchaseValue + gstAmount;
+    
+    // Normal purchase outflow without scheme:
+    final double normalPurchaseValue = totalAccumulated + originalMakingChargeAmount;
+    final double normalGstAmount = normalPurchaseValue * 0.03;
+    final double grandTotalWithoutScheme = normalPurchaseValue + normalGstAmount;
+    
+    // Total savings (Making charge discount + GST savings)
+    final double totalSavings = grandTotalWithoutScheme - grandTotalWithScheme;
+    
+    // Gold weight calculation: Total contribution divided by gold rate per gram
+    final double accumulatedWeight = goldRate > 0 ? totalAccumulated / goldRate : 0.0;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -248,53 +262,80 @@ class _SmartPlusCalculatorWidgetState extends ConsumerState<SmartPlusCalculatorW
             ],
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
 
-        // Duration of advance (Months) - Locked Slider at 11
+        // Selection of Ornament Making Charge Percentage
+        Text(
+          'Select Ornament Making Charge',
+          style: TextStyle(
+            fontSize: 13.5,
+            fontFamily: 'Urbanist',
+            fontWeight: FontWeight.w600,
+            color: isDark ? Palette.whiteColor.withValues(alpha: 0.9) : Palette.blackColor.withValues(alpha: 0.8),
+          ),
+        ),
+        const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text(
-                'Number of EMA (Easy Monthly Advances)',
-                style: TextStyle(
-                  fontSize: 13.5,
-                  fontFamily: 'Urbanist',
-                  fontWeight: FontWeight.w600,
-                  color: isDark ? Palette.whiteColor.withValues(alpha: 0.9) : Palette.blackColor.withValues(alpha: 0.8),
+          children: [5.0, 8.0, 10.0, 12.0].map((rate) {
+            final isSelected = _makingChargePercent == rate;
+            final netRate = (rate - (rate <= 5.0 ? rate : 5.0)).toInt();
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                child: ChoiceChip(
+                  showCheckmark: false,
+                  label: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '${rate.toInt()}% MC',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.bold,
+                          color: isSelected
+                              ? Colors.white
+                              : (isDark ? Palette.whiteColor.withValues(alpha: 0.8) : Palette.blackColor.withValues(alpha: 0.8)),
+                        ),
+                      ),
+                      Text(
+                        netRate == 0 ? '0% net' : '$netRate% net',
+                        style: TextStyle(
+                          fontSize: 9,
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.w600,
+                          color: isSelected
+                              ? Colors.white.withValues(alpha: 0.8)
+                              : Colors.grey.shade500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  selected: isSelected,
+                  selectedColor: Palette.primaryColor,
+                  backgroundColor: isDark ? Palette.whiteColor.withValues(alpha: 0.05) : Colors.grey.shade100,
+                  onSelected: (selected) {
+                    if (selected) {
+                      setState(() {
+                        _makingChargePercent = rate;
+                      });
+                    }
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide(
+                      color: isSelected
+                          ? Palette.primaryColor
+                          : (isDark ? Colors.white24 : Colors.grey.shade300),
+                      width: 1,
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
                 ),
               ),
-            ),
-            Text(
-              '$_months',
-              style: TextStyle(
-                fontFamily: 'Urbanist',
-                fontWeight: FontWeight.bold,
-                fontSize: 15,
-                color: isDark ? Palette.whiteColor : Palette.blackColor,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 4),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: SliderTheme(
-            data: SliderTheme.of(context).copyWith(
-              activeTrackColor: Colors.grey.shade400,
-              inactiveTrackColor: Colors.grey.shade200,
-              thumbColor: Colors.grey.shade500,
-              trackHeight: 4,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
-              trackShape: const RectangularSliderTrackShape(), // Extends track to full width
-            ),
-            child: Slider(
-              min: 1,
-              max: 11, // max month capped to 11
-              value: _months.toDouble(),
-              onChanged: null, // Locked / Disabled
-            ),
-          ),
+            );
+          }).toList(),
         ),
         const SizedBox(height: 20),
 
@@ -317,25 +358,35 @@ class _SmartPlusCalculatorWidgetState extends ConsumerState<SmartPlusCalculatorW
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildCardRow('Total Accumulated Amount', '₹ ${totalAccumulated.toStringAsFixed(0)}', isDark),
+                _buildCardRow('Total Contribution (11 Months)', '₹ ${totalAccumulated.toStringAsFixed(0)}', isDark),
                 const SizedBox(height: 8),
-                _buildCardRow('Average Making Charge (8%)', '₹ ${makingChargeAmount.toStringAsFixed(0)}', isDark),
+                _buildCardRow('Ornament Making Charge (${_makingChargePercent.toStringAsFixed(0)}%)', '₹ ${originalMakingChargeAmount.toStringAsFixed(0)}', isDark),
                 const SizedBox(height: 8),
                 _buildCardRow(
-                  'Scheme MC Discount (${discountPercent.toStringAsFixed(0)}%)',
-                  '-₹ ${discountAmount.toStringAsFixed(0)}',
+                  'Scheme MC Benefit (5% reduction)',
+                  '-₹ ${makingChargeSavings.toStringAsFixed(0)}',
                   isDark,
                   valueColor: Colors.green.shade600,
                   isBold: true,
                 ),
                 const SizedBox(height: 8),
-                _buildCardRow('Total Jewelry Value', '₹ ${totalJewelryValue.toStringAsFixed(0)}', isDark),
+                _buildCardRow('Net Making Charge Payable (${netMakingChargePercent.toStringAsFixed(0)}%)', '₹ ${netMakingChargeAmount.toStringAsFixed(0)}', isDark),
+                const SizedBox(height: 8),
+                _buildCardRow('Applicable GST (3%)', '₹ ${gstAmount.toStringAsFixed(0)}', isDark),
                 const SizedBox(height: 12),
                 
                 const Divider(height: 1, thickness: 0.5),
                 const SizedBox(height: 12),
                 
-                _buildCardRow('Grand Total (You Pay)', '₹ ${grandTotalPaid.toStringAsFixed(0)}', isDark, isBold: true),
+                _buildCardRow('Grand Total (Estimated Outflow)', '₹ ${grandTotalWithScheme.toStringAsFixed(0)}', isDark, isBold: true),
+                const SizedBox(height: 8),
+                _buildCardRow(
+                  'Total Scheme Savings',
+                  '₹ ${totalSavings.toStringAsFixed(0)}',
+                  isDark,
+                  valueColor: Colors.green.shade600,
+                  isBold: true,
+                ),
                 const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -378,9 +429,9 @@ class _SmartPlusCalculatorWidgetState extends ConsumerState<SmartPlusCalculatorW
                       height: 100,
                       child: CustomPaint(
                         painter: DonutChartPainter(
-                          paidFraction: totalAccumulated / grandTotalPaid,
+                          paidFraction: grandTotalWithScheme / grandTotalWithoutScheme,
                           paidColor: Palette.primaryColor,
-                          benefitColor: Palette.primaryColor.withValues(alpha: 0.25),
+                          benefitColor: Colors.green.shade600.withValues(alpha: 0.25),
                           strokeWidth: 8,
                         ),
                         child: Center(
@@ -407,15 +458,15 @@ class _SmartPlusCalculatorWidgetState extends ConsumerState<SmartPlusCalculatorW
                         children: [
                           _buildLegendItem(
                             color: Palette.primaryColor,
-                            title: 'Accumulated Amount',
-                            subtitle: '₹${totalAccumulated.toStringAsFixed(0)} (${paidWeight.toStringAsFixed(2)}g)',
+                            title: 'Estimated Outflow',
+                            subtitle: '₹${grandTotalWithScheme.toStringAsFixed(0)}',
                             isDark: isDark,
                           ),
                           const SizedBox(height: 8),
                           _buildLegendItem(
-                            color: Palette.primaryColor.withValues(alpha: 0.25),
-                            title: 'Benefits/Savings',
-                            subtitle: '₹${discountAmount.toStringAsFixed(0)} (${benefitWeight.toStringAsFixed(3)}g)',
+                            color: Colors.green.shade600,
+                            title: 'Scheme Savings',
+                            subtitle: '₹${totalSavings.toStringAsFixed(0)}',
                             isDark: isDark,
                           ),
                         ],
@@ -425,9 +476,9 @@ class _SmartPlusCalculatorWidgetState extends ConsumerState<SmartPlusCalculatorW
                 ),
                 const SizedBox(height: 20),
 
-                // Seperated Red Note (GST & Premium Jewellery Details)
+                // Separated Red Note (GST & Scheme Benefits Details)
                 Text(
-                  'Note: Average making charges of 8% are fully discounted under the scheme. For Premium or Diamond jewelry, the making charge discount is 5% less (i.e. a 3% discount is applied, leaving a net 5% making charge payable). GST amount is not included (3% GST is applicable on the final purchase value).',
+                  'Note: Pay the fixed amount every month for 11 months. On successful completion, receive a 5 percentage-point reduction in making charges. If you miss even one monthly payment, you will not be eligible for the scheme benefit. GST (3%) will be applicable on the final purchase value as per prevailing government regulations.',
                   style: TextStyle(
                     fontFamily: 'Urbanist',
                     fontSize: 10,
@@ -438,9 +489,9 @@ class _SmartPlusCalculatorWidgetState extends ConsumerState<SmartPlusCalculatorW
                 ),
                 const SizedBox(height: 8),
                 
-                // Seperated Standard Disclaimer Note (Grey)
+                // Separated Standard Disclaimer Note (Grey)
                 Text(
-                  'Note: The benefits calculator serves for illustrative purposes only; actual values may vary based on the gold rate on the payment day, accumulated weight/amount, and making cost of the selected jewellery.',
+                  'Note: The benefits calculator serves for illustrative purposes only. The accumulated gold weight is calculated using today\'s gold price; actual weight is accumulated based on the prevailing gold rate on the date of each monthly payment.',
                   style: TextStyle(
                     fontFamily: 'Urbanist',
                     fontSize: 9.5,
@@ -467,22 +518,24 @@ class _SmartPlusCalculatorWidgetState extends ConsumerState<SmartPlusCalculatorW
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontFamily: 'Urbanist',
-            fontSize: 13.5,
-            fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
-            color: isDark 
-                ? Palette.whiteColor.withValues(alpha: isBold ? 0.95 : 0.7) 
-                : Palette.blackColor.withValues(alpha: isBold ? 0.95 : 0.7),
+        Expanded(
+          child: Text(
+            label,
+            style: TextStyle(
+              fontFamily: 'Urbanist',
+              fontSize: 13,
+              fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
+              color: isDark 
+                  ? Palette.whiteColor.withValues(alpha: isBold ? 0.95 : 0.7) 
+                  : Palette.blackColor.withValues(alpha: isBold ? 0.95 : 0.7),
+            ),
           ),
         ),
         Text(
           value,
           style: TextStyle(
             fontFamily: 'Urbanist',
-            fontSize: isBold ? 15.5 : 14,
+            fontSize: isBold ? 15 : 13.5,
             fontWeight: isBold ? FontWeight.bold : FontWeight.w600,
             color: valueColor ?? (isDark ? Palette.whiteColor : Palette.blackColor),
           ),

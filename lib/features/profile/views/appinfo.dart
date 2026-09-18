@@ -81,21 +81,21 @@ class _AppInfoViewState extends State<AppInfoView> {
                       items: [
                         _InfoRowItem(
                           icon: Icons.devices_rounded,
-                          iconBg: Palette.primaryColor.withOpacity(0.1),
+                          iconBg: Palette.primaryColor.withValues(alpha: 0.1),
                           iconColor: Palette.primaryColor,
                           label: 'Platform',
                           subtitle: 'Flutter · Android & iOS',
                         ),
                         _InfoRowItem(
                           icon: Icons.update_rounded,
-                          iconBg: Palette.primaryColor.withOpacity(0.1),
+                          iconBg: Palette.primaryColor.withValues(alpha: 0.1),
                           iconColor: Palette.primaryColor,
                           label: 'Last updated',
                           subtitle: 'March 2025',
                         ),
                         _InfoRowItem(
                           icon: Icons.tag_rounded,
-                          iconBg: Palette.primaryColor.withOpacity(0.1),
+                          iconBg: Palette.primaryColor.withValues(alpha: 0.1),
                           iconColor: Palette.primaryColor,
                           label: 'Build number',
                           subtitle: _packageInfo?.buildNumber ?? '—',
@@ -118,7 +118,7 @@ class _AppInfoViewState extends State<AppInfoView> {
                           label: 'Privacy policy',
                           isLink: true,
                           onTap: () => _launchUrl(
-                            'http://anaswaragoldanddiamonds.in/privacy-policy',
+                            'https://www.ashokgoldanddiamonds.in/privacy-policy',
                           ),
                         ),
                         _InfoRowItem(
@@ -128,19 +128,17 @@ class _AppInfoViewState extends State<AppInfoView> {
                           label: 'Terms of service',
                           isLink: true,
                           onTap: () => _launchUrl(
-                            'http://anaswaragoldanddiamonds.in/terms',
+                            'https://www.ashokgoldanddiamonds.in/terms-and-conditions',
                           ),
                         ),
                         _InfoRowItem(
-                          icon: Icons.info_outline_rounded,
+                          icon: Icons.assignment_return_outlined,
                           iconBg: Colors.grey[100]!,
                           iconColor: Colors.grey[600]!,
-                          label: 'Open source licenses',
+                          label: 'Refund policy',
                           isLink: true,
-                          onTap: () => showLicensePage(
-                            context: context,
-                            applicationName: 'Anaswara',
-                            applicationVersion: _packageInfo?.version ?? '',
+                          onTap: () => _launchUrl(
+                            'https://www.ashokgoldanddiamonds.in/refund-and-cancellation-policy',
                           ),
                         ),
                       ],
@@ -188,7 +186,7 @@ class _HeroCard extends StatelessWidget {
             width: SizeConfig.w(context, 72),
             height: SizeConfig.w(context, 72),
             decoration: BoxDecoration(
-              color: Palette.primaryColor.withOpacity(0.08),
+              color: Palette.primaryColor.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Icon(
@@ -199,7 +197,7 @@ class _HeroCard extends StatelessWidget {
           ),
           SizedBox(height: SizeConfig.h(context, 14)),
           Text(
-            'Anaswara',
+            'Ashok Gold and Diamonds',
             style: TextStyle(
               fontSize: w * 0.055,
               fontWeight: FontWeight.w700,
@@ -216,7 +214,7 @@ class _HeroCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
             decoration: BoxDecoration(
-              color: Palette.primaryColor.withOpacity(0.08),
+              color: Palette.primaryColor.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
@@ -323,7 +321,7 @@ class _DeveloperCard extends StatelessWidget {
           _DevContactRow(
             icon: Icons.language_rounded,
             iconColor: Palette.primaryColor,
-            iconBg: Palette.primaryColor.withOpacity(0.1),
+            iconBg: Palette.primaryColor.withValues(alpha: 0.1),
             label: 'Website',
             value: 'www.gramboo.in',
             onTap: () => onLaunch('https://www.gramboo.in'),
@@ -618,7 +616,7 @@ class _Footer extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            '© ${DateTime.now().year} Anaswara. All rights reserved.',
+            '© ${DateTime.now().year} Ashok Gold and Diamonds. All rights reserved.',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: w * 0.028, color: Colors.grey[400]),
           ),

@@ -64,7 +64,7 @@ class CustomTimePicker extends StatelessWidget {
                 boxShadow: [
                   if (selectedTime != null)
                     BoxShadow(
-                      color: Palette.primaryColor.withOpacity(0.08),
+                      color: Palette.primaryColor.withValues(alpha: 0.08),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),

@@ -207,7 +207,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
                         w: w,
                         icon: Icons.info_outline_rounded,
                         iconColor: Palette.primaryColor,
-                        iconBg: Palette.primaryColor.withOpacity(0.1),
+                        iconBg: Palette.primaryColor.withValues(alpha: 0.1),
                         title: 'About App',
                         subtitle: 'Version, developer info',
                         onTap: () => context.push(AppInfoView.routeName),
@@ -259,7 +259,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
                           w: w,
                           icon: Icons.login_rounded,
                           iconColor: Palette.primaryColor,
-                          iconBg: Palette.primaryColor.withOpacity(0.1),
+                          iconBg: Palette.primaryColor.withValues(alpha: 0.1),
                           title: 'Login',
                           subtitle: 'Access your account',
                           onTap: () => AuthGuard.requireAuth(context, ref),
@@ -326,7 +326,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF1A1A2E).withOpacity(0.35),
+            color: const Color(0xFF1A1A2E).withValues(alpha: 0.35),
             blurRadius: 24,
             offset: const Offset(0, 10),
           ),
@@ -342,7 +342,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
               height: w * 0.4,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Palette.primaryColor.withOpacity(0.08),
+                color: Palette.primaryColor.withValues(alpha: 0.08),
               ),
             ),
           ),
@@ -354,7 +354,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
               height: w * 0.35,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.04),
+                color: Colors.white.withValues(alpha: 0.04),
               ),
             ),
           ),
@@ -373,7 +373,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
                             gradient: LinearGradient(
                               colors: [
                                 Palette.primaryColor,
-                                Palette.primaryColor.withOpacity(0.5),
+                                Palette.primaryColor.withValues(alpha: 0.5),
                               ],
                             ),
                           ),
@@ -426,8 +426,10 @@ class _ProfileViewState extends ConsumerState<ProfileView>
                     padding: EdgeInsets.symmetric(vertical: h * 0.016),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(14),
-                      color: Colors.white.withOpacity(0.1),
-                      border: Border.all(color: Colors.white.withOpacity(0.15)),
+                      color: Colors.white.withValues(alpha: 0.1),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.15),
+                      ),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -486,7 +488,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -515,7 +517,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -542,7 +544,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
             child: Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                color: Palette.primaryColor.withOpacity(0.1),
+                color: Palette.primaryColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
@@ -670,9 +672,11 @@ class _ProfileViewState extends ConsumerState<ProfileView>
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: Palette.primaryColor.withOpacity(0.07),
+          color: Palette.primaryColor.withValues(alpha: 0.07),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Palette.primaryColor.withOpacity(0.2)),
+          border: Border.all(
+            color: Palette.primaryColor.withValues(alpha: 0.2),
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -711,7 +715,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
             Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                color: Palette.primaryColor.withOpacity(0.1),
+                color: Palette.primaryColor.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(

@@ -20,7 +20,7 @@ class NoItemsWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(SizeConfig.w(context, 16)),
           boxShadow: [
             BoxShadow(
-              color: Palette.shadowColor.withOpacity(0.05),
+              color: Palette.shadowColor.withValues(alpha: 0.05),
               blurRadius: 6,
               offset: Offset(0, 2),
             ),

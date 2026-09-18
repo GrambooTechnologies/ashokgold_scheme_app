@@ -39,7 +39,7 @@ class LoginRequiredWidget extends StatelessWidget {
               Icon(
                 icon,
                 size: SizeConfig.w(context, 80),
-                color: Palette.primaryColor.withOpacity(0.5),
+                color: Palette.primaryColor.withValues(alpha: 0.5),
               ),
               SizedBox(height: SizeConfig.h(context, 24)),
               Text(

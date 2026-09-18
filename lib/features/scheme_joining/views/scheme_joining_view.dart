@@ -274,7 +274,7 @@ class _SchemeJoiningHeader extends StatelessWidget {
         color: Palette.primaryColor,
         boxShadow: [
           BoxShadow(
-            color: Palette.primaryColor.withOpacity(0.3),
+            color: Palette.primaryColor.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 6),
           ),
@@ -291,7 +291,7 @@ class _SchemeJoiningHeader extends StatelessWidget {
               height: w * 0.38,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.05),
+                color: Colors.white.withValues(alpha: 0.05),
               ),
             ),
           ),
@@ -303,7 +303,7 @@ class _SchemeJoiningHeader extends StatelessWidget {
               height: w * 0.22,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.04),
+                color: Colors.white.withValues(alpha: 0.04),
               ),
             ),
           ),
@@ -330,7 +330,7 @@ class _SchemeJoiningHeader extends StatelessWidget {
                         size: SizeConfig.w(context, 24),
                       ),
                       style: IconButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.12),
+                        backgroundColor: Colors.white.withValues(alpha: 0.12),
                         padding: const EdgeInsets.all(13),
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -355,7 +355,7 @@ class _SchemeJoiningHeader extends StatelessWidget {
                             Text(
                               activeMeta.subtitle,
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.65),
+                                color: Colors.white.withValues(alpha: 0.65),
                                 fontSize: w * 0.03,
                               ),
                             ),
@@ -370,7 +370,7 @@ class _SchemeJoiningHeader extends StatelessWidget {
                         vertical: 5,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.15),
+                        color: Colors.white.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -464,8 +464,8 @@ class _StepConnector extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(1),
         color: isCompleted
-            ? Colors.white.withOpacity(0.85)
-            : Colors.white.withOpacity(0.2),
+            ? Colors.white.withValues(alpha: 0.85)
+            : Colors.white.withValues(alpha: 0.2),
       ),
     );
   }
@@ -506,11 +506,11 @@ class _StepNode extends StatelessWidget {
                   ? Colors.white
                   : isActive
                   ? Colors.white
-                  : Colors.white.withOpacity(0.15),
+                  : Colors.white.withValues(alpha: 0.15),
               boxShadow: isActive
                   ? [
                       BoxShadow(
-                        color: Colors.white.withOpacity(0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         blurRadius: 12,
                         spreadRadius: 2,
                       ),
@@ -528,7 +528,7 @@ class _StepNode extends StatelessWidget {
                       isActive ? meta.activeIcon : meta.icon,
                       color: isActive
                           ? Palette.primaryColor
-                          : Colors.white.withOpacity(0.5),
+                          : Colors.white.withValues(alpha: 0.5),
                       size: isActive ? 20 : 17,
                     ),
             ),
@@ -542,8 +542,8 @@ class _StepNode extends StatelessWidget {
               color: isActive
                   ? Colors.white
                   : isDone
-                  ? Colors.white.withOpacity(0.75)
-                  : Colors.white.withOpacity(0.4),
+                  ? Colors.white.withValues(alpha: 0.75)
+                  : Colors.white.withValues(alpha: 0.4),
             ),
             child: Text(meta.label),
           ),
