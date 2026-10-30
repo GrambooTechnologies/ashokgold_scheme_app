@@ -14,9 +14,15 @@ import 'package:ashokgold_scheme_app/features/scheme_joining/widgets/step_1_bran
 import 'package:ashokgold_scheme_app/features/scheme_joining/widgets/step_2_billing_address.dart';
 import 'package:ashokgold_scheme_app/features/scheme_joining/widgets/step_3_amount_selection.dart';
 import 'package:ashokgold_scheme_app/features/scheme_joining/widgets/step_4_review_confirmation.dart';
+import 'package:ashokgold_scheme_app/core/custom_widgets/custom_snackBar.dart';
+import 'package:ashokgold_scheme_app/features/kyc/models/kyc_status.dart';
+import 'package:ashokgold_scheme_app/features/kyc/providers/kyc_provider.dart';
+import 'package:ashokgold_scheme_app/features/kyc/views/kyc_selection_view.dart';
+import 'package:ashokgold_scheme_app/features/kyc/views/kyc_status_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class SchemeJoiningView extends ConsumerStatefulWidget {
   static const String routeName = '/scheme-joining';
@@ -103,6 +109,31 @@ class _SchemeJoiningViewState extends ConsumerState<SchemeJoiningView>
 
   void _setupFlow() {
     if (!mounted) return;
+
+    final kycStatus = ref.read(kycStatusProvider);
+    if (kycStatus != KycStatus.approved) {
+      context.showErrorSnackBar(
+        'Identity verification is required before joining schemes.',
+      );
+      if (kycStatus == KycStatus.notSubmitted) {
+        context.pushReplacement(
+          KycSelectionView.routeName,
+          extra: {
+            'targetSchemeId': schemeId,
+            'targetAmount': initialAmount,
+          },
+        );
+      } else {
+        context.pushReplacement(
+          KycStatusView.routeName,
+          extra: {
+            'targetSchemeId': schemeId,
+            'targetAmount': initialAmount,
+          },
+        );
+      }
+      return;
+    }
 
     final initializer = SchemeJoiningInitializer(
       ref: ref,

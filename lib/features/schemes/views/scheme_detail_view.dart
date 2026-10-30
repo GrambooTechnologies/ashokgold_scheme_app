@@ -21,6 +21,10 @@ import '../providers/translated_scheme_provider.dart';
 import '../widgets/benefit_point_card_widget.dart';
 import '../widgets/smart_plus_calculator_widget.dart';
 import '../widgets/tiered_benefit_calculator_widget.dart';
+import '../../kyc/models/kyc_status.dart';
+import '../../kyc/providers/kyc_provider.dart';
+import '../../kyc/views/kyc_selection_view.dart';
+import '../../kyc/views/kyc_status_view.dart';
 
 class SchemeDetailView extends ConsumerStatefulWidget {
   static const String routeName = '/scheme-detail';
@@ -209,12 +213,11 @@ class _SchemeDetailViewState extends ConsumerState<SchemeDetailView> {
                 shadowColor: Palette.primaryColor.withValues(alpha: 0.3),
                 child: InkWell(
                   onTap: () {
-                    if (!AuthGuard.requireAuth(context, ref)) return;
-                    context.push(
-                      SchemeJoiningView.routePath(
-                        schemeId: scheme.schemeId,
-                        amount: selectedAmount,
-                      ),
+                    _handleJoinScheme(
+                      context,
+                      ref,
+                      schemeId: scheme.schemeId,
+                      selectedAmount: selectedAmount,
                     );
                   },
                   borderRadius: BorderRadius.circular(w * 0.04),
@@ -399,6 +402,124 @@ class _SchemeDetailViewState extends ConsumerState<SchemeDetailView> {
 
         SizedBox(height: h * 0.1),
       ],
+    );
+  }
+
+  void _handleJoinScheme(
+    BuildContext context,
+    WidgetRef ref, {
+    required String schemeId,
+    required double? selectedAmount,
+  }) {
+    if (!AuthGuard.requireAuth(context, ref)) return;
+
+    final kycStatus = ref.read(kycStatusProvider);
+
+    if (kycStatus == KycStatus.approved) {
+      // Once approved, skip verification screen and proceed directly to scheme joining
+      context.push(
+        SchemeJoiningView.routePath(schemeId: schemeId, amount: selectedAmount),
+      );
+      return;
+    }
+
+    // If pending, action required, or rejected, show status view
+    if (kycStatus == KycStatus.pending ||
+        kycStatus == KycStatus.actionRequired ||
+        kycStatus == KycStatus.rejected) {
+      context.push(
+        KycStatusView.routeName,
+        extra: {'targetSchemeId': schemeId, 'targetAmount': selectedAmount},
+      );
+      return;
+    }
+
+    // Not submitted yet: show KYC required modal
+    _showKycRequiredDialog(context, schemeId: schemeId, amount: selectedAmount);
+  }
+
+  void _showKycRequiredDialog(
+    BuildContext context, {
+    required String schemeId,
+    required double? amount,
+  }) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Row(
+          children: [
+            Icon(Icons.verified_user_rounded, color: Palette.primaryColor),
+            SizedBox(width: 8),
+            Text(
+              'Identity Verification',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF1A1A2E),
+                fontFamily: 'Urbanist',
+              ),
+            ),
+          ],
+        ),
+        content: const Text(
+          'Identity verification is required before joining any gold savings scheme. Complete verification once to unlock all schemes across your account.',
+          style: TextStyle(
+            fontSize: 13,
+            height: 1.4,
+            fontFamily: 'Urbanist',
+            color: Colors.black87,
+          ),
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () => Navigator.of(ctx).pop(),
+            child: Container(
+              width: 65,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Palette.primaryColor, width: 1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(
+                child: Text(
+                  "Cancel",
+                  style: TextStyle(fontFamily: 'Urbanist', fontSize: 14),
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(ctx).pop();
+              context.push(
+                KycSelectionView.routeName,
+                extra: {'targetSchemeId': schemeId, 'targetAmount': amount},
+              );
+            },
+            child: Container(
+              width: 100,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Palette.primaryColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(
+                child: Text(
+                  "Verify Now",
+                  style: TextStyle(
+                    fontFamily: 'Urbanist',
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

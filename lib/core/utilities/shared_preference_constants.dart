@@ -6,4 +6,5 @@ class SharedPreferenceConstants {
   static const String customerId = "customer_id";
   static const String authCustomerId = "auth_customer_id";
   static const String phoneNumber = "phone_number";
+  static const String kycPrefix = "customer_kyc_";
 }

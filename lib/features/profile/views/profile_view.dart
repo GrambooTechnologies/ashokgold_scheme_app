@@ -18,6 +18,11 @@ import 'package:ashokgold_scheme_app/features/profile/views/edit_profile_view.da
 import 'package:ashokgold_scheme_app/features/profile/views/social_media_view.dart';
 import 'package:ashokgold_scheme_app/features/settings/views/privacy_policy_view.dart';
 import 'package:ashokgold_scheme_app/features/settings/views/terms_and_conditions_view.dart';
+import 'package:ashokgold_scheme_app/features/kyc/models/kyc_status.dart';
+import 'package:ashokgold_scheme_app/features/kyc/providers/kyc_provider.dart';
+import 'package:ashokgold_scheme_app/features/kyc/views/kyc_selection_view.dart';
+import 'package:ashokgold_scheme_app/features/kyc/views/kyc_status_view.dart';
+import 'package:ashokgold_scheme_app/features/kyc/widgets/kyc_status_badge.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -64,6 +69,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
   Widget build(BuildContext context) {
     final customer = ref.watch(customerProvider);
     final nomineesAsync = ref.watch(nomineeListProvider);
+    final kycStatus = ref.watch(kycStatusProvider);
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
 
@@ -131,12 +137,63 @@ class _ProfileViewState extends ConsumerState<ProfileView>
                     email,
                     photo,
                     customer,
+                    kycStatus,
                   ),
 
                   SizedBox(height: h * 0.022),
 
                   _sectionLabel('Account'),
                   SizedBox(height: h * 0.008),
+
+                  // ── Identity Verification (KYC) ──
+                  _buildMenuCard(
+                    w: w,
+                    children: [
+                      _buildMenuItem(
+                        w: w,
+                        icon: Icons.verified_user_rounded,
+                        iconColor: kycStatus == KycStatus.approved
+                            ? const Color(0xFF047857)
+                            : kycStatus == KycStatus.pending
+                            ? const Color(0xFFB45309)
+                            : kycStatus == KycStatus.actionRequired
+                            ? const Color(0xFFEA580C)
+                            : Palette.primaryColor,
+                        iconBg: kycStatus == KycStatus.approved
+                            ? const Color(0xFFE8FAF1)
+                            : kycStatus == KycStatus.pending
+                            ? const Color(0xFFFFFBEB)
+                            : kycStatus == KycStatus.actionRequired
+                            ? const Color(0xFFFFF7ED)
+                            : Palette.primaryColor.withValues(alpha: 0.1),
+                        title: 'Identity Verification',
+                        subtitle: kycStatus == KycStatus.approved
+                            ? 'Approved • Ready to join schemes'
+                            : kycStatus == KycStatus.pending
+                            ? 'Application under review'
+                            : kycStatus == KycStatus.actionRequired
+                            ? 'Action required on documents'
+                            : 'Complete KYC to join schemes',
+                        trailing: KycStatusBadge(
+                          status: kycStatus,
+                          compact: true,
+                        ),
+                        onTap: () {
+                          if (customer == null) {
+                            AuthGuard.requireAuth(context, ref);
+                            return;
+                          }
+                          if (kycStatus == KycStatus.notSubmitted) {
+                            context.push(KycSelectionView.routeName);
+                          } else {
+                            context.push(KycStatusView.routeName);
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: h * 0.014),
 
                   // ── Nominees ──
                   _buildNomineeSection(context, w, customer, nomineesAsync),
@@ -302,6 +359,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
     String email,
     String? photo,
     CustomerModel? customer,
+    KycStatus kycStatus,
   ) {
     ImageProvider? imageProvider;
     if (photo != null) imageProvider = NetworkImage(photo);
@@ -411,47 +469,146 @@ class _ProfileViewState extends ConsumerState<ProfileView>
                   ],
                 ),
                 SizedBox(height: h * 0.022),
-                GestureDetector(
-                  onTap: () {
-                    if (customer != null) {
-                      context.push(EditProfileView.routeName, extra: customer);
-                    } else {
-                      AuthGuard.requireAuth(context, ref);
-                      setState(() {});
-                      return;
-                    }
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(vertical: h * 0.016),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      color: Colors.white.withValues(alpha: 0.1),
-                      border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.15),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.edit_rounded,
-                          size: w * 0.04,
-                          color: Colors.white,
-                        ),
-                        SizedBox(width: w * 0.02),
-                        Text(
-                          'Edit Profile',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: w * 0.036,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.3,
+                Row(
+                  children: [
+                    // Edit Profile Button
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          if (customer != null) {
+                            context.push(
+                              EditProfileView.routeName,
+                              extra: customer,
+                            );
+                          } else {
+                            AuthGuard.requireAuth(context, ref);
+                            setState(() {});
+                            return;
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: h * 0.015),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            color: Colors.white.withValues(alpha: 0.1),
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.15),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.edit_rounded,
+                                size: w * 0.038,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: w * 0.015),
+                              Text(
+                                'Edit Profile',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: w * 0.033,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.3,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                    SizedBox(width: w * 0.025),
+                    // KYC Verification Button (Option like edit screen)
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          if (customer == null) {
+                            AuthGuard.requireAuth(context, ref);
+                            setState(() {});
+                            return;
+                          }
+                          if (kycStatus == KycStatus.notSubmitted) {
+                            context.push(KycSelectionView.routeName);
+                          } else {
+                            context.push(KycStatusView.routeName);
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: h * 0.015),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            color: kycStatus == KycStatus.approved
+                                ? const Color(
+                                    0xFF047857,
+                                  ).withValues(alpha: 0.25)
+                                : kycStatus == KycStatus.pending
+                                ? const Color(
+                                    0xFFD97706,
+                                  ).withValues(alpha: 0.25)
+                                : kycStatus == KycStatus.actionRequired
+                                ? const Color(
+                                    0xFFEA580C,
+                                  ).withValues(alpha: 0.25)
+                                : Colors.white.withValues(alpha: 0.12),
+                            border: Border.all(
+                              color: kycStatus == KycStatus.approved
+                                  ? const Color(
+                                      0xFF34D399,
+                                    ).withValues(alpha: 0.4)
+                                  : kycStatus == KycStatus.pending
+                                  ? const Color(
+                                      0xFFFBBF24,
+                                    ).withValues(alpha: 0.4)
+                                  : kycStatus == KycStatus.actionRequired
+                                  ? const Color(
+                                      0xFFFB923C,
+                                    ).withValues(alpha: 0.4)
+                                  : Colors.white.withValues(alpha: 0.2),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                kycStatus == KycStatus.approved
+                                    ? Icons.verified_rounded
+                                    : kycStatus == KycStatus.pending
+                                    ? Icons.hourglass_top_rounded
+                                    : kycStatus == KycStatus.actionRequired
+                                    ? Icons.error_outline_rounded
+                                    : Icons.shield_outlined,
+                                size: w * 0.038,
+                                color: kycStatus == KycStatus.approved
+                                    ? const Color(0xFF34D399)
+                                    : kycStatus == KycStatus.pending
+                                    ? const Color(0xFFFBBF24)
+                                    : kycStatus == KycStatus.actionRequired
+                                    ? const Color(0xFFFB923C)
+                                    : Colors.white,
+                              ),
+                              SizedBox(width: w * 0.015),
+                              Text(
+                                kycStatus == KycStatus.approved
+                                    ? 'Verified'
+                                    : kycStatus == KycStatus.pending
+                                    ? 'Under Review'
+                                    : kycStatus == KycStatus.actionRequired
+                                    ? 'Action Req.'
+                                    : 'KYC Verify',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: w * 0.033,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.3,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -514,7 +671,6 @@ class _ProfileViewState extends ConsumerState<ProfileView>
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
-        color: Colors.white,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -523,140 +679,147 @@ class _ProfileViewState extends ConsumerState<ProfileView>
           ),
         ],
       ),
-      child: Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          tilePadding: EdgeInsets.symmetric(
-            horizontal: w * 0.05,
-            vertical: w * 0.01,
-          ),
-          initiallyExpanded: _nomineeExpanded,
-          onExpansionChanged: (expanded) {
-            if (customer == null) {
-              AuthGuard.requireAuth(context, ref);
-              return;
-            }
-            setState(() => _nomineeExpanded = expanded);
-          },
-          trailing: AnimatedRotation(
-            turns: _nomineeExpanded ? 0.25 : 0,
-            duration: const Duration(milliseconds: 200),
-            child: Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: Palette.primaryColor.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                CupertinoIcons.right_chevron,
-                size: 13,
-                color: Palette.primaryColor,
-              ),
+      child: Material(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        clipBehavior: Clip.antiAlias,
+        child: Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: ExpansionTile(
+            tilePadding: EdgeInsets.symmetric(
+              horizontal: w * 0.05,
+              vertical: w * 0.01,
             ),
-          ),
-          title: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
+            initiallyExpanded: _nomineeExpanded,
+            onExpansionChanged: (expanded) {
+              if (customer == null) {
+                AuthGuard.requireAuth(context, ref);
+                return;
+              }
+              setState(() => _nomineeExpanded = expanded);
+            },
+            trailing: AnimatedRotation(
+              turns: _nomineeExpanded ? 0.25 : 0,
+              duration: const Duration(milliseconds: 200),
+              child: Container(
+                padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEEF6FF),
-                  borderRadius: BorderRadius.circular(10),
+                  color: Palette.primaryColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
-                  Icons.people_alt_rounded,
-                  size: w * 0.045,
-                  color: const Color(0xFF2176FF),
+                  CupertinoIcons.right_chevron,
+                  size: 13,
+                  color: Palette.primaryColor,
                 ),
               ),
-              SizedBox(width: w * 0.035),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'My Nominees',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: w * 0.038,
-                      color: const Color(0xFF1A1A2E),
-                    ),
+            ),
+            title: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFEEF6FF),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  Text(
-                    'Manage beneficiaries',
-                    style: TextStyle(
-                      fontSize: w * 0.028,
-                      color: Colors.grey.shade400,
-                    ),
+                  child: Icon(
+                    Icons.people_alt_rounded,
+                    size: w * 0.045,
+                    color: const Color(0xFF2176FF),
                   ),
-                ],
-              ),
-            ],
-          ),
-          children: [
-            if (customer == null) ...[
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Text(
-                  'Please login to view your nominees',
-                  style: TextStyle(color: Colors.grey.shade500),
                 ),
-              ),
-            ] else ...[
-              Divider(height: 1, color: Colors.grey.shade100),
-              nomineesAsync.when(
-                data: (list) {
-                  if (list.isEmpty) {
-                    return Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.person_add_alt_1_rounded,
-                            size: 40,
-                            color: Colors.grey.shade300,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'No nominees added yet',
-                            style: TextStyle(
-                              color: Colors.grey.shade500,
-                              fontSize: 13,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          _addNomineeButton(context),
-                        ],
+                SizedBox(width: w * 0.035),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'My Nominees',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: w * 0.038,
+                        color: const Color(0xFF1A1A2E),
                       ),
-                    );
-                  }
-                  final preview = list.take(3).toList();
-                  return Column(
-                    children: [
-                      const SizedBox(height: 8),
-                      ...preview.map((n) => _nomineePreviewItem(n.nomineeName)),
-                      Padding(
-                        padding: const EdgeInsets.all(14),
-                        child: _addNomineeButton(
-                          context,
-                          label: 'Add / View All Nominees',
-                        ),
+                    ),
+                    Text(
+                      'Manage beneficiaries',
+                      style: TextStyle(
+                        fontSize: w * 0.028,
+                        color: Colors.grey.shade400,
                       ),
-                    ],
-                  );
-                },
-                loading: () => const Padding(
-                  padding: EdgeInsets.all(20),
-                  child: CupertinoActivityIndicator(),
+                    ),
+                  ],
                 ),
-                error: (e, _) => Padding(
+              ],
+            ),
+            children: [
+              if (customer == null) ...[
+                Padding(
                   padding: const EdgeInsets.all(20),
                   child: Text(
-                    'Failed to load nominees',
+                    'Please login to view your nominees',
                     style: TextStyle(color: Colors.grey.shade500),
                   ),
                 ),
-              ),
+              ] else ...[
+                Divider(height: 1, color: Colors.grey.shade100),
+                nomineesAsync.when(
+                  data: (list) {
+                    if (list.isEmpty) {
+                      return Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.person_add_alt_1_rounded,
+                              size: 40,
+                              color: Colors.grey.shade300,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'No nominees added yet',
+                              style: TextStyle(
+                                color: Colors.grey.shade500,
+                                fontSize: 13,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            _addNomineeButton(context),
+                          ],
+                        ),
+                      );
+                    }
+                    final preview = list.take(3).toList();
+                    return Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        ...preview.map(
+                          (n) => _nomineePreviewItem(n.nomineeName),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(14),
+                          child: _addNomineeButton(
+                            context,
+                            label: 'Add / View All Nominees',
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                  loading: () => const Padding(
+                    padding: EdgeInsets.all(20),
+                    child: CupertinoActivityIndicator(),
+                  ),
+                  error: (e, _) => Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(
+                      'Failed to load nominees',
+                      style: TextStyle(color: Colors.grey.shade500),
+                    ),
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -753,6 +916,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
     required String title,
     required String subtitle,
     required VoidCallback onTap,
+    Widget? trailing,
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -794,6 +958,7 @@ class _ProfileViewState extends ConsumerState<ProfileView>
                 ],
               ),
             ),
+            if (trailing != null) ...[trailing, SizedBox(width: w * 0.02)],
             Icon(
               CupertinoIcons.right_chevron,
               size: 14,

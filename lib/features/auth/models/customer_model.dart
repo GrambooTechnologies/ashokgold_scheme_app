@@ -15,6 +15,8 @@ class CustomerModel {
   final String? country;
   final String? profilePhoto;
   final String? updatedAt;
+  final String? kycStatus;
+  final String? kycReferenceId;
 
   CustomerModel({
     required this.customerId,
@@ -33,6 +35,8 @@ class CustomerModel {
     this.country,
     this.profilePhoto,
     this.updatedAt,
+    this.kycStatus,
+    this.kycReferenceId,
   });
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) {
@@ -53,6 +57,8 @@ class CustomerModel {
       country: json['country'] as String?,
       profilePhoto: json['profilePhoto'] as String?,
       updatedAt: json['updatedAt'] as String?,
+      kycStatus: json['kycStatus'] as String?,
+      kycReferenceId: json['kycReferenceId'] as String?,
     );
   }
 
@@ -74,6 +80,8 @@ class CustomerModel {
       'country': country,
       'profilePhoto': profilePhoto,
       'updatedAt': updatedAt,
+      'kycStatus': kycStatus,
+      'kycReferenceId': kycReferenceId,
     };
   }
 
@@ -94,6 +102,8 @@ class CustomerModel {
     String? country,
     String? profilePhoto,
     String? updatedAt,
+    String? kycStatus,
+    String? kycReferenceId,
   }) {
     return CustomerModel(
       customerId: customerId ?? this.customerId,
@@ -112,6 +122,8 @@ class CustomerModel {
       country: country ?? this.country,
       profilePhoto: profilePhoto ?? this.profilePhoto,
       updatedAt: updatedAt ?? this.updatedAt,
+      kycStatus: kycStatus ?? this.kycStatus,
+      kycReferenceId: kycReferenceId ?? this.kycReferenceId,
     );
   }
 }

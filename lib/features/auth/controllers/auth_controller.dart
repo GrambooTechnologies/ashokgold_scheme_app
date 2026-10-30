@@ -9,6 +9,7 @@ import 'package:ashokgold_scheme_app/features/auth/repository/auth_repository.da
 import 'package:ashokgold_scheme_app/features/auth/views/phone_number_view.dart';
 import 'package:ashokgold_scheme_app/features/auth/views/registration_view.dart';
 import 'package:ashokgold_scheme_app/features/home/views/bottom_nav.dart';
+import 'package:ashokgold_scheme_app/features/kyc/providers/kyc_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -158,6 +159,7 @@ class AuthController extends Notifier<bool> {
         ref.read(customerProvider.notifier).clearCustomer();
         ref.read(accessTokenProvider.notifier).state = null;
         ref.read(refreshTokenProvider.notifier).state = null;
+        ref.invalidate(kycControllerProvider);
         context.showSuccessSnackBar('Logout successful!');
         context.go(PhoneNumberView.routeName);
       },

@@ -6,6 +6,7 @@ import 'package:ashokgold_scheme_app/features/auth/views/splash_view.dart';
 import 'package:ashokgold_scheme_app/features/customer_schemes/views/customer_closed_scheme_detail_view.dart';
 import 'package:ashokgold_scheme_app/features/customer_schemes/views/customer_joined_active_scheme_detail_view.dart';
 import 'package:ashokgold_scheme_app/features/customer_schemes/widgets/completed_schemes_tab.dart';
+import 'package:ashokgold_scheme_app/features/kyc/models/customer_kyc_model.dart';
 import 'package:ashokgold_scheme_app/features/scheme_payment_entry/views/installment_history_view.dart';
 import 'package:ashokgold_scheme_app/features/scheme_payment_entry/views/installment_payment_page.dart';
 import 'package:ashokgold_scheme_app/features/scheme_payment_entry/views/payment_tries_view.dart';
@@ -31,6 +32,9 @@ import 'package:go_router/go_router.dart';
 import '../../features/profile/views/appinfo.dart';
 import '../../features/profile/views/contact_support_view.dart';
 import '../../features/notifications/views/notification_inbox_view.dart';
+import '../../features/kyc/views/kyc_selection_view.dart';
+import '../../features/kyc/views/kyc_manual_verification_view.dart';
+import '../../features/kyc/views/kyc_status_view.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: SplashView.routeName,
@@ -222,6 +226,40 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: NotificationInboxView.routeName,
       builder: (context, state) => const NotificationInboxView(),
+    ),
+    GoRoute(
+      path: KycSelectionView.routeName,
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        return KycSelectionView(
+          isResubmission: extra?['isResubmission'] as bool? ?? false,
+          existingKyc: extra?['existingKyc'] as CustomerKycModel?,
+          targetSchemeId: extra?['targetSchemeId'] as String?,
+          targetAmount: extra?['targetAmount'] as double?,
+        );
+      },
+    ),
+    GoRoute(
+      path: KycManualVerificationView.routeName,
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        return KycManualVerificationView(
+          isResubmission: extra?['isResubmission'] as bool? ?? false,
+          existingKyc: extra?['existingKyc'] as CustomerKycModel?,
+          targetSchemeId: extra?['targetSchemeId'] as String?,
+          targetAmount: extra?['targetAmount'] as double?,
+        );
+      },
+    ),
+    GoRoute(
+      path: KycStatusView.routeName,
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        return KycStatusView(
+          targetSchemeId: extra?['targetSchemeId'] as String?,
+          targetAmount: extra?['targetAmount'] as double?,
+        );
+      },
     ),
   ],
 );
